@@ -1,78 +1,97 @@
 {
   "Muzarella": {
     "precio": 35000,
-    "ingredientes": ""
+    "ingredientes": "",
+    "imagen": "muzarella.jpeg"
   },
   "Choclo": {
     "precio": 40000,
-    "ingredientes": ""
+    "ingredientes": "",
+    "imagen": ""
   },
   "Fugaza": {
     "precio": 38000,
-    "ingredientes": "Cebolla caramelizada"
+    "ingredientes": "Cebolla caramelizada",
+    "imagen": ""
   },
   "Peperonni": {
     "precio": 45000,
-    "ingredientes": ""
+    "ingredientes": "",
+    "imagen": "peperonni.jpeg"
   },
   "Jamón": {
     "precio": 42000,
-    "ingredientes": ""
+    "ingredientes": "",
+    "imagen": "jamon.jpeg"
   },
   "Katupiry": {
     "precio": 44000,
-    "ingredientes": ""
+    "ingredientes": "",
+    "imagen": "katupiry.jpeg"
   },
   "Pancho": {
     "precio": 42000,
-    "ingredientes": ""
+    "ingredientes": "",
+    "imagen": "pancho.jpeg"
   },
   "Panceta": {
     "precio": 45000,
-    "ingredientes": ""
+    "ingredientes": "",
+    "imagen": ""
   },
   "Napolitana": {
     "precio": 45000,
-    "ingredientes": "Tomates en rodajas, queso parmesano, perejil con ajo"
+    "ingredientes": "Tomates en rodajas, queso parmesano, perejil con ajo",
+    "imagen": ""
   },
   "Margarita": {
     "precio": 42000,
-    "ingredientes": "Tomates en rodajas, albahaca fresca"
+    "ingredientes": "Tomates en rodajas, albahaca fresca",
+    "imagen": "margarita.jpeg"
   },
   "Vegetariana": {
     "precio": 40000,
-    "ingredientes": "Morrones y cebolla a la plancha, con tomates en rodajas y choclo"
+    "ingredientes": "Morrones y cebolla a la plancha, con tomates en rodajas y choclo",
+    "imagen": ""
   },
   "Travieza": {
     "precio": 48000,
-    "ingredientes": "Morrones con cebolla a la plancha, choclo, tomates en rodajas y panceta crocante"
+    "ingredientes": "Morrones con cebolla a la plancha, choclo, tomates en rodajas y panceta crocante",
+    "imagen": "traviesa.jpeg"
   },
   "Choripizza": {
     "precio": 50000,
-    "ingredientes": "Trozos de chorizo con cebolla a la plancha, aceitunas negras"
+    "ingredientes": "Trozos de chorizo con cebolla a la plancha, aceitunas negras",
+    "imagen": "chori.jpeg"
   },
   "Panceta y Cheddar": {
     "precio": 48000,
-    "ingredientes": "Panceta crocante y queso Cheddar"
+    "ingredientes": "Panceta crocante y queso Cheddar",
+    "imagen": ""
   },
   "Alekei": {
     "precio": 54000,
-    "ingredientes": "Pollo, katupiry, Verduras"
+    "ingredientes": "Pollo, katupiry, Verduras",
+    "imagen": "alekei.jpeg"
   },
   "4 Quesos": {
     "precio": 52000,
-    "ingredientes": "Queso muzza, queso azul, queso katupiry, que PY"
+    "ingredientes": "Queso muzza, queso azul, queso katupiry, que PY",
+    "imagen": ""
   },
   "Mexicana": {
     "precio": 60000,
-    "ingredientes": "Cebollas, morrones, tomates, carne de lomitos a la plancha, picante, aceitunas negras"
+    "ingredientes": "Cebollas, morrones, tomates, carne de lomitos a la plancha, picante, aceitunas negras",
+    "imagen": "mexicana.jpeg"
   },
   "Encantada": {
     "precio": 52000,
-    "ingredientes": "Choclo, katupiry, papas fritas"
+    "ingredientes": "Choclo, katupiry, papas fritas",
+    "imagen": ""
   },
   "Aloricito": {
     "precio": 85000,
-    "ingredientes": "Carnes, Verduras y panceta"
+    "ingredientes": "Carnes, Verduras y panceta",
+    "imagen": ""
   }
 }
