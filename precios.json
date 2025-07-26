@@ -2,7 +2,7 @@
   "Muzarella": {
     "precio": 35000,
     "ingredientes": "",
-    "imagen": "muzarella.jpeg"
+    "imagen": "img-pizza/muzarella.jpeg"
   },
   "Choclo": {
     "precio": 40000,
@@ -17,22 +17,22 @@
   "Peperonni": {
     "precio": 45000,
     "ingredientes": "",
-    "imagen": "peperonni.jpeg"
+    "imagen": "img-pizza/peperonni.jpeg"
   },
   "Jamón": {
     "precio": 42000,
     "ingredientes": "",
-    "imagen": "jamon.jpeg"
+    "imagen": "img-pizza/jamon.jpeg"
   },
   "Katupiry": {
     "precio": 44000,
     "ingredientes": "",
-    "imagen": "katupiry.jpeg"
+    "imagen": "img-pizza/katupiry.jpeg"
   },
   "Pancho": {
     "precio": 42000,
     "ingredientes": "",
-    "imagen": "pancho.jpeg"
+    "imagen": "img-pizza/pancho.jpeg"
   },
   "Panceta": {
     "precio": 45000,
@@ -47,7 +47,7 @@
   "Margarita": {
     "precio": 42000,
     "ingredientes": "Tomates en rodajas, albahaca fresca",
-    "imagen": "margarita.jpeg"
+    "imagen": "img-pizza/margarita.jpeg"
   },
   "Vegetariana": {
     "precio": 40000,
@@ -57,12 +57,12 @@
   "Travieza": {
     "precio": 48000,
     "ingredientes": "Morrones con cebolla a la plancha, choclo, tomates en rodajas y panceta crocante",
-    "imagen": "traviesa.jpeg"
+    "imagen": "img-pizza/traviesa.jpeg"
   },
   "Choripizza": {
     "precio": 50000,
     "ingredientes": "Trozos de chorizo con cebolla a la plancha, aceitunas negras",
-    "imagen": "chori.jpeg"
+    "imagen": "img-pizza/chori.jpeg"
   },
   "Panceta y Cheddar": {
     "precio": 48000,
@@ -72,7 +72,7 @@
   "Alekei": {
     "precio": 54000,
     "ingredientes": "Pollo, katupiry, Verduras",
-    "imagen": "alekei.jpeg"
+    "imagen": "img-pizza/alekei.jpeg"
   },
   "4 Quesos": {
     "precio": 52000,
@@ -82,7 +82,7 @@
   "Mexicana": {
     "precio": 60000,
     "ingredientes": "Cebollas, morrones, tomates, carne de lomitos a la plancha, picante, aceitunas negras",
-    "imagen": "mexicana.jpeg"
+    "imagen": "img-pizza/mexicana.jpeg"
   },
   "Encantada": {
     "precio": 52000,
