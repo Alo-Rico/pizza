@@ -101,7 +101,7 @@ header h1 { color:#c24a00; }
   </div>
 </div>
 
-<!-- BOTONES CORRECTOS -->
+<!-- BOTONES -->
 <div class="btn-grid">
   <button id="btnHamburguesas" class="btn-flotante">HAMBURGUESAS</button>
   <button id="btnLomitos" class="btn-flotante">LOMITOS</button>
@@ -130,12 +130,13 @@ if (!clienteId) {
 const pedidoRef = ref(db, "pedidos/" + clienteId);
 
 let productosGlobal = {};
+let productoActual = null;
 let mitadPendiente = null;
 
 const modal = document.getElementById("modal");
 const titulo = document.getElementById("titulo");
 
-/* 🔥 TOTAL VERDE */
+/* TOTAL VERDE */
 onValue(pedidoRef, snap=>{
   const data = snap.val();
   let total = 0;
@@ -184,14 +185,16 @@ function mostrarTotal(total){
 document.getElementById("cancelar").onclick=()=>modal.style.display="none";
 
 document.getElementById("entera").onclick=()=>{
-  const n = titulo.textContent;
-  push(pedidoRef,{nombre:n,precio:productosGlobal[n].precio});
+  push(pedidoRef,{
+    nombre: productoActual.nombre,
+    precio: productoActual.precio
+  });
   modal.style.display="none";
 };
 
 document.getElementById("mitad").onclick=()=>{
-  const n = titulo.textContent;
-  const p = productosGlobal[n].precio;
+  const n = productoActual.nombre;
+  const p = productoActual.precio;
 
   if(!mitadPendiente){
     mitadPendiente={n,p};
@@ -199,16 +202,18 @@ document.getElementById("mitad").onclick=()=>{
     alert("Elegí la otra mitad");
   } else {
     const precioFinal = Math.max(mitadPendiente.p,p);
+
     push(pedidoRef,{
       nombre:`Mitad ${mitadPendiente.n} + ${n}`,
       precio:precioFinal
     });
+
     mitadPendiente=null;
     modal.style.display="none";
   }
 };
 
-/* 🔥 JSON */
+/* JSON */
 const res = await fetch("https://alo-rico.github.io/pizza/precios.json");
 const data = await res.json();
 productosGlobal = data;
@@ -219,10 +224,10 @@ Object.entries(data).forEach(([n,i])=>{
   const card=document.createElement("div");
   card.className="product";
 
-  // ⚠️ IMPORTANTE: usar imagen directa (NO carpeta)
   card.innerHTML=`<img src="${i.imagen}"><h3>${n}</h3><p>Gs. ${i.precio}</p>`;
 
   card.onclick=()=>{
+    productoActual = { nombre:n, precio:i.precio };
     titulo.textContent=n;
     modal.style.display="flex";
   };
@@ -234,6 +239,27 @@ Object.entries(data).forEach(([n,i])=>{
 btnHamburguesas.onclick=()=>location.href="https://alo-rico.github.io/hamburguesa/";
 btnLomitos.onclick=()=>location.href="https://alo-rico.github.io/lomitos/";
 btnBebidas.onclick=()=>location.href="https://alo-rico.github.io/bebidas/";
+
+/* 🔥 BOTON MI PEDIDO FUNCIONANDO */
+btnCarrito.onclick = () => {
+  let mensaje = "Hola, quiero pedir:\n";
+  let total = 0;
+
+  onValue(pedidoRef, (snapshot) => {
+    const data = snapshot.val();
+    if (!data) return alert("Pedido vacío");
+
+    Object.values(data).forEach(item => {
+      mensaje += `${item.nombre} - Gs. ${item.precio.toLocaleString()}\n`;
+      total += item.precio;
+    });
+
+    mensaje += `\nTotal: Gs. ${total.toLocaleString()}`;
+
+    window.open("https://wa.me/?text=" + encodeURIComponent(mensaje));
+  }, { onlyOnce: true });
+};
+
 </script>
 
 </body>
