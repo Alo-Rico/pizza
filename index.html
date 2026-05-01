@@ -78,6 +78,17 @@ header h1 { color:#c24a00; }
 #btnLomitos { background:#ff5722; }
 #btnBebidas { background:#00bcd4; }
 #btnCarrito { background:#007bff; }
+
+/* PANEL PEDIDO */
+#pedido-flotante {
+  display:none;
+  position:fixed;
+  bottom:0;
+  width:100%;
+  background:white;
+  padding:10px;
+  border-top:2px solid #c24a00;
+}
 </style>
 </head>
 
@@ -101,6 +112,15 @@ header h1 { color:#c24a00; }
   </div>
 </div>
 
+<!-- PANEL PEDIDO -->
+<div id="pedido-flotante">
+  <h3>Mi Pedido</h3>
+  <ul id="lista-pedido"></ul>
+  <p id="total-pedido"></p>
+  <button id="btn-borrar">Borrar</button>
+  <button id="btn-enviar">Enviar</button>
+</div>
+
 <!-- BOTONES -->
 <div class="btn-grid">
   <button id="btnHamburguesas" class="btn-flotante">HAMBURGUESAS</button>
@@ -111,7 +131,7 @@ header h1 { color:#c24a00; }
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
-import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";
+import { getDatabase, ref, push, onValue, remove } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyADGYsqhbCFuKj2fXpontLpND_rtT7Nlno",
@@ -129,94 +149,115 @@ if (!clienteId) {
 
 const pedidoRef = ref(db, "pedidos/" + clienteId);
 
-let productosGlobal = {};
 let productoActual = null;
 let mitadPendiente = null;
 
 const modal = document.getElementById("modal");
 const titulo = document.getElementById("titulo");
 
-/* TOTAL VERDE */
-onValue(pedidoRef, snap=>{
-  const data = snap.val();
-  let total = 0;
-
-  if(data){
-    Object.values(data).forEach(p=>{
-      total += p.precio;
-    });
-  }
-
-  mostrarTotal(total);
-});
-
-function mostrarTotal(total){
-  let box = document.getElementById("total-flotante");
-
-  if(!box){
-    box = document.createElement("div");
-    box.id="total-flotante";
-    box.style.position="fixed";
-    box.style.bottom="90px";
-    box.style.left="50%";
-    box.style.transform="translateX(-50%)";
-    box.style.background="#28a745";
-    box.style.color="white";
-    box.style.padding="12px 20px";
-    box.style.borderRadius="30px";
-    box.style.fontWeight="bold";
-    box.style.zIndex="9999";
-    document.body.appendChild(box);
-  }
-
-  if(total === 0){
-    box.style.display="none";
-    return;
-  }
-
-  box.style.display="block";
-  box.innerText="💰 Total: Gs. " + total.toLocaleString();
-
-  clearTimeout(box.timer);
-  box.timer=setTimeout(()=>box.style.display="none",5000);
+// =======================
+// CLICK PRODUCTO
+// =======================
+function abrirProducto(nombre, precio){
+  productoActual = {nombre, precio};
+  titulo.innerText = nombre;
+  modal.style.display = "flex";
 }
 
-/* MODAL */
-document.getElementById("cancelar").onclick=()=>modal.style.display="none";
+// =======================
+// MODAL
+// =======================
+document.getElementById("cancelar").onclick = () => modal.style.display = "none";
 
-document.getElementById("entera").onclick=()=>{
+document.getElementById("entera").onclick = () => {
   push(pedidoRef,{
     nombre: productoActual.nombre,
     precio: productoActual.precio
   });
-  modal.style.display="none";
+  modal.style.display = "none";
 };
 
-document.getElementById("mitad").onclick=()=>{
-  const n = productoActual.nombre;
-  const p = productoActual.precio;
-
+document.getElementById("mitad").onclick = () => {
   if(!mitadPendiente){
-    mitadPendiente={n,p};
-    modal.style.display="none";
+    mitadPendiente = productoActual;
+    modal.style.display = "none";
     alert("Elegí la otra mitad");
   } else {
-    const precioFinal = Math.max(mitadPendiente.p,p);
+    const precio = Math.max(mitadPendiente.precio, productoActual.precio);
 
     push(pedidoRef,{
-      nombre:`Mitad ${mitadPendiente.n} + ${n}`,
-      precio:precioFinal
+      nombre:`Mitad ${mitadPendiente.nombre} + ${productoActual.nombre}`,
+      precio:precio
     });
 
-    mitadPendiente=null;
-    modal.style.display="none";
+    mitadPendiente = null;
+    modal.style.display = "none";
   }
 };
 
-/* JSON */
+// =======================
+// RENDER PEDIDO
+// =======================
+onValue(pedidoRef, snap=>{
+  const data = snap.val();
+  const lista = document.getElementById("lista-pedido");
+  lista.innerHTML = "";
+
+  let total = 0;
+
+  if(data){
+    Object.values(data).forEach(p=>{
+      const li = document.createElement("li");
+      li.textContent = p.nombre + " - Gs. " + p.precio.toLocaleString();
+      lista.appendChild(li);
+      total += p.precio;
+    });
+  }
+
+  document.getElementById("total-pedido").innerText = "Total: Gs. " + total.toLocaleString();
+});
+
+// =======================
+// BOTONES
+// =======================
+btnHamburguesas.onclick=()=>location.href="https://alo-rico.github.io/hamburguesa/";
+btnLomitos.onclick=()=>location.href="https://alo-rico.github.io/lomitos/";
+btnBebidas.onclick=()=>location.href="https://alo-rico.github.io/bebidas/";
+
+// 👉 ESTE ES EL ARREGLO IMPORTANTE
+btnCarrito.onclick=()=>{
+  const panel = document.getElementById("pedido-flotante");
+  panel.style.display = panel.style.display === "block" ? "none" : "block";
+};
+
+// =======================
+// BORRAR / ENVIAR
+// =======================
+document.getElementById("btn-borrar").onclick = ()=> remove(pedidoRef);
+
+document.getElementById("btn-enviar").onclick = ()=>{
+  let mensaje = "Hola, quiero pedir:\n";
+  let total = 0;
+
+  onValue(pedidoRef,(snap)=>{
+    const data = snap.val();
+    if(!data) return;
+
+    Object.values(data).forEach(p=>{
+      mensaje += `${p.nombre} - Gs. ${p.precio}\n`;
+      total += p.precio;
+    });
+
+    mensaje += `\nTotal: Gs. ${total}`;
+    window.open("https://wa.me/?text="+encodeURIComponent(mensaje));
+  },{onlyOnce:true});
+};
+
+// =======================
+// CARGAR MENU
+// =======================
 const res = await fetch("https://alo-rico.github.io/pizza/precios.json");
 const data = await res.json();
-productosGlobal = data;
 
 const menu = document.getElementById("menu");
 
@@ -226,40 +267,10 @@ Object.entries(data).forEach(([n,i])=>{
 
   card.innerHTML=`<img src="${i.imagen}"><h3>${n}</h3><p>Gs. ${i.precio}</p>`;
 
-  card.onclick=()=>{
-    productoActual = { nombre:n, precio:i.precio };
-    titulo.textContent=n;
-    modal.style.display="flex";
-  };
+  card.onclick=()=>abrirProducto(n,i.precio);
 
   menu.appendChild(card);
 });
-
-/* BOTONES */
-btnHamburguesas.onclick=()=>location.href="https://alo-rico.github.io/hamburguesa/";
-btnLomitos.onclick=()=>location.href="https://alo-rico.github.io/lomitos/";
-btnBebidas.onclick=()=>location.href="https://alo-rico.github.io/bebidas/";
-
-/* 🔥 BOTON MI PEDIDO FUNCIONANDO */
-btnCarrito.onclick = () => {
-  let mensaje = "Hola, quiero pedir:\n";
-  let total = 0;
-
-  onValue(pedidoRef, (snapshot) => {
-    const data = snapshot.val();
-    if (!data) return alert("Pedido vacío");
-
-    Object.values(data).forEach(item => {
-      mensaje += `${item.nombre} - Gs. ${item.precio.toLocaleString()}\n`;
-      total += item.precio;
-    });
-
-    mensaje += `\nTotal: Gs. ${total.toLocaleString()}`;
-
-    window.open("https://wa.me/?text=" + encodeURIComponent(mensaje));
-  }, { onlyOnce: true });
-};
-
 </script>
 
 </body>
