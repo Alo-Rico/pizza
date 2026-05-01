@@ -11,10 +11,7 @@ body { font-family: Arial; background:#fefaf0; margin:0; text-align:center; }
 header img.logo { width:120px; }
 header h1 { color:#c24a00; }
 
-.icono {
-  width:80px;
-  margin:10px auto;
-}
+.icono { width:80px; margin:10px auto; }
 
 .menu-container {
   display:flex;
@@ -39,6 +36,7 @@ header h1 { color:#c24a00; }
   object-fit:cover;
 }
 
+/* MODAL */
 .modal {
   display:none;
   position:fixed;
@@ -56,7 +54,7 @@ header h1 { color:#c24a00; }
   border-radius:10px;
 }
 
-/* BOTONES IGUAL BEBIDAS */
+/* BOTONES */
 .btn-grid {
   position: fixed;
   right: 15px;
@@ -64,22 +62,21 @@ header h1 { color:#c24a00; }
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 10px;
-  z-index: 9998;
 }
 
 .btn-flotante {
-  color: #fff;
+  color: white;
   border: none;
-  padding: 12px 18px;
+  padding: 12px;
   border-radius: 50px;
   font-weight: bold;
   cursor: pointer;
   width: 140px;
 }
 
-#btnPizza { background:#ffc107; color:#000; }
 #btnHamburguesas { background:#28a745; }
 #btnLomitos { background:#ff5722; }
+#btnBebidas { background:#00bcd4; }
 #btnCarrito { background:#007bff; }
 </style>
 </head>
@@ -104,11 +101,11 @@ header h1 { color:#c24a00; }
   </div>
 </div>
 
-<!-- BOTONES -->
+<!-- BOTONES CORRECTOS -->
 <div class="btn-grid">
   <button id="btnHamburguesas" class="btn-flotante">HAMBURGUESAS</button>
   <button id="btnLomitos" class="btn-flotante">LOMITOS</button>
-  <button id="btnPizza" class="btn-flotante">PIZZAS</button>
+  <button id="btnBebidas" class="btn-flotante">BEBIDAS</button>
   <button id="btnCarrito" class="btn-flotante">MI PEDIDO</button>
 </div>
 
@@ -211,7 +208,7 @@ document.getElementById("mitad").onclick=()=>{
   }
 };
 
-/* 🔥 JSON CORREGIDO */
+/* 🔥 JSON */
 const res = await fetch("https://alo-rico.github.io/pizza/precios.json");
 const data = await res.json();
 productosGlobal = data;
@@ -221,18 +218,22 @@ const menu = document.getElementById("menu");
 Object.entries(data).forEach(([n,i])=>{
   const card=document.createElement("div");
   card.className="product";
-  card.innerHTML=`<img src="imagen/${i.imagen}"><h3>${n}</h3><p>Gs. ${i.precio}</p>`;
+
+  // ⚠️ IMPORTANTE: usar imagen directa (NO carpeta)
+  card.innerHTML=`<img src="${i.imagen}"><h3>${n}</h3><p>Gs. ${i.precio}</p>`;
+
   card.onclick=()=>{
     titulo.textContent=n;
     modal.style.display="flex";
   };
+
   menu.appendChild(card);
 });
 
 /* BOTONES */
 btnHamburguesas.onclick=()=>location.href="https://alo-rico.github.io/hamburguesa/";
 btnLomitos.onclick=()=>location.href="https://alo-rico.github.io/lomitos/";
-btnCarrito.onclick=()=>alert("El pedido se muestra en verde abajo");
+btnBebidas.onclick=()=>location.href="https://alo-rico.github.io/bebidas/";
 </script>
 
 </body>
