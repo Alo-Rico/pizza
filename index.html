@@ -19,7 +19,7 @@ header h1 { color:#c24a00; }
   flex-wrap:wrap;
   justify-content:center;
   padding:20px;
-  padding-bottom:120px;
+  padding-bottom:160px;
 }
 
 .product {
@@ -79,19 +79,21 @@ header h1 { color:#c24a00; }
 #btnLomitos { background:#ff5722; }
 #btnBebidas { background:#00bcd4; }
 
-/* 🔥 BOTÓN VERDE PEDIDO */
-#btnCarrito {
+/* 🔥 BOTÓN VERDE (TOTAL) */
+#btnTotal {
   position: fixed;
   right: 15px;
-  bottom: 80px;
+  bottom: 90px;
   background:#28a745;
   display:none;
-  width:auto;
   padding:12px 18px;
   border-radius:50px;
+  color:white;
+  font-weight:bold;
+  border:none;
 }
 
-/* PANEL DETALLE (opcional) */
+/* PANEL PEDIDO */
 #pedido-flotante {
   display:none;
   position:fixed;
@@ -128,7 +130,7 @@ header h1 { color:#c24a00; }
   </div>
 </div>
 
-<!-- DETALLE PEDIDO -->
+<!-- PANEL PEDIDO -->
 
 <div id="pedido-flotante">
   <h3>Mi Pedido</h3>
@@ -144,9 +146,12 @@ header h1 { color:#c24a00; }
   <button id="btnHamburguesas" class="btn-flotante">HAMBURGUESAS</button>
   <button id="btnLomitos" class="btn-flotante">LOMITOS</button>
   <button id="btnBebidas" class="btn-flotante">BEBIDAS</button>
+  <button id="btnCarrito" class="btn-flotante">MI PEDIDO</button>
 </div>
 
-<button id="btnCarrito">Gs. 0</button>
+<!-- BOTÓN TOTAL -->
+
+<button id="btnTotal">Gs. 0</button>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
@@ -206,7 +211,7 @@ mitad.onclick = ()=>{
 // 🔥 RENDER PEDIDO
 onValue(pedidoRef, snap=>{
   const data = snap.val();
-  const btn = document.getElementById("btnCarrito");
+  const btnTotal = document.getElementById("btnTotal");
   const lista = document.getElementById("lista-pedido");
 
   lista.innerHTML="";
@@ -220,26 +225,37 @@ onValue(pedidoRef, snap=>{
       lista.appendChild(li);
     });
 
-    btn.style.display="block";
-    btn.innerText="🛒 Gs. "+total.toLocaleString();
+    btnTotal.style.display="block";
+    btnTotal.innerText="🛒 Gs. "+total.toLocaleString();
 
   }else{
-    btn.style.display="none";
+    btnTotal.style.display="none";
   }
 
-  document.getElementById("total-pedido").innerText="Total: Gs. "+total;
+  document.getElementById("total-pedido").innerText="Total: Gs. "+total.toLocaleString();
 });
 
-// BOTÓN PEDIDO
+// BOTONES
+btnHamburguesas.onclick=()=>location.href="https://alo-rico.github.io/hamburguesa/";
+btnLomitos.onclick=()=>location.href="https://alo-rico.github.io/lomitos/";
+btnBebidas.onclick=()=>location.href="https://alo-rico.github.io/bebidas/";
+
+// 👉 ESTE ES TU BOTÓN ORIGINAL (NO SE TOCA)
 btnCarrito.onclick=()=>{
-  const panel=document.getElementById("pedido-flotante");
-  panel.style.display=panel.style.display==="block"?"none":"block";
+  const panel = document.getElementById("pedido-flotante");
+  panel.style.display = panel.style.display === "block" ? "none" : "block";
+};
+
+// 👉 BOTÓN VERDE TAMBIÉN ABRE PEDIDO
+btnTotal.onclick=()=>{
+  const panel = document.getElementById("pedido-flotante");
+  panel.style.display="block";
 };
 
 // BORRAR / ENVIAR
-btn-borrar.onclick=()=>remove(pedidoRef);
+document.getElementById("btn-borrar").onclick = ()=> remove(pedidoRef);
 
-btn-enviar.onclick=()=>{
+document.getElementById("btn-enviar").onclick = ()=>{
   let mensaje="Hola, quiero pedir:\n";
   let total=0;
 
@@ -257,12 +273,7 @@ btn-enviar.onclick=()=>{
   },{onlyOnce:true});
 };
 
-// BOTONES
-btnHamburguesas.onclick=()=>location.href="https://alo-rico.github.io/hamburguesa/";
-btnLomitos.onclick=()=>location.href="https://alo-rico.github.io/lomitos/";
-btnBebidas.onclick=()=>location.href="https://alo-rico.github.io/bebidas/";
-
-// CARGAR MENU
+// CARGAR MENU (NO TOCADO)
 const res = await fetch("https://alo-rico.github.io/pizza/precios.json");
 const data = await res.json();
 
