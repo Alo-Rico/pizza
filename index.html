@@ -232,7 +232,7 @@ const menu = document.getElementById("menu");
 Object.entries(productos).forEach(([n,i])=>{
  const card=document.createElement("div");
  card.className="product";
- card.innerHTML=`<img src="imagen/${i.imagen}"><h3>${n}</h3><p>Gs. ${i.precio}</p>`;
+ card.innerHTML=`<img src="img-pizza/${i.imagen}"><h3>${n}</h3><p>Gs. ${i.precio}</p>`;
  card.onclick=()=>abrirPopup(n,i.precio);
  menu.appendChild(card);
 });
