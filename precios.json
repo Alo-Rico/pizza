@@ -2,27 +2,27 @@
   "Muzarella": {
     "precio": 35000,
     "ingredientes": "",
-    "imagen": "img-pizza/muzarella.jpeg"
+    "imagen": "img-pizza/muzarella.jpg"
   },
   "Peperonni": {
     "precio": 45000,
     "ingredientes": "",
-    "imagen": "img-pizza/peperonni.jpeg"
+    "imagen": "img-pizza/peperonni.jpg"
   },
   "Jamón": {
     "precio": 42000,
     "ingredientes": "",
-    "imagen": "img-pizza/jamon.jpeg"
+    "imagen": "img-pizza/jamon.jpg"
   },
   "Katupiry": {
     "precio": 44000,
     "ingredientes": "",
-    "imagen": "img-pizza/katupiry.jpeg"
+    "imagen": "img-pizza/katupiry.jpg"
   },
   "Pancho": {
     "precio": 42000,
     "ingredientes": "",
-    "imagen": "img-pizza/pancho.jpeg"
+    "imagen": "img-pizza/pancho.jpg"
   },
   "Margarita": {
     "precio": 42000,
@@ -32,21 +32,21 @@
   "Travieza": {
     "precio": 48000,
     "ingredientes": "Morrones con cebolla a la plancha, choclo, tomates en rodajas y panceta crocante",
-    "imagen": "img-pizza/traviesa.jpeg"
+    "imagen": "img-pizza/traviesa.jpg"
   },
   "Choripizza": {
     "precio": 50000,
     "ingredientes": "Trozos de chorizo con cebolla a la plancha, aceitunas negras",
-    "imagen": "img-pizza/chori.jpeg"
+    "imagen": "img-pizza/chori.jpg"
   },
   "Alekei": {
     "precio": 54000,
     "ingredientes": "Pollo, katupiry, Verduras",
-    "imagen": "img-pizza/alekei.jpeg"
+    "imagen": "img-pizza/alekei.jpg"
   },
   "Mexicana": {
     "precio": 60000,
     "ingredientes": "Cebollas, morrones, tomates, carne de lomitos a la plancha, picante, aceitunas negras",
-    "imagen": "img-pizza/mexicana.jpeg"
+    "imagen": "img-pizza/mexicana.jpg"
   }
 }
