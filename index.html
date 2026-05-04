@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -82,6 +83,7 @@ header img.icono { width: 60px; }
   <input type="number" id="cantidad-input" value="1">
   <br><br>
   <button id="btn-entera">Entera</button>
+  <button id="btn-mitad">Mitad</button>
   <button id="btn-cancelar">Cancelar</button>
  </div>
 </div>
@@ -151,6 +153,7 @@ onValue(pedidoRef,(snap)=>{
 
 // MODAL
 let productoSeleccionado={};
+let mitadPendiente = null;
 
 window.abrirPopup=(n,p)=>{
  productoSeleccionado={nombre:n,precio:p};
@@ -158,53 +161,46 @@ window.abrirPopup=(n,p)=>{
  document.getElementById("modal-titulo").innerText=n;
 };
 
+// ENTERA (FIX)
 document.getElementById("btn-entera").onclick = () => {
-  const nombre = document.getElementById('modal-titulo').textContent;
-  const precio = productosGlobal[nombre].precio;
-  const pedido = obtenerPedido();
-  pedido.push({ nombre, tipo: 'Entera', precio });
-  guardarPedido(pedido);
-  renderizarPedido();
-  document.getElementById('modal').style.display = 'none';
+ const cant = parseInt(document.getElementById("cantidad-input").value)||1;
+
+ push(pedidoRef,{
+  nombre: productoSeleccionado.nombre,
+  precio: productoSeleccionado.precio,
+  cantidad: cant
+ });
+
+ document.getElementById("modal").style.display="none";
 };
 
+// MITAD (FIX)
 document.getElementById("btn-mitad").onclick = () => {
-  const nombre = document.getElementById('modal-titulo').textContent;
-  const precio = productosGlobal[nombre].precio;
-  if (!mitadPendiente) {
-    mitadPendiente = { nombre, precio };
-    document.getElementById('modal').style.display = 'none';
 
-    const advertencia = document.createElement('div');
-    advertencia.textContent = 'Seleccioná ahora la segunda mitad';
-    advertencia.style.position = 'fixed';
-    advertencia.style.top = '80%';
-    advertencia.style.left = '50%';
-    advertencia.style.transform = 'translate(-50%, -50%)';
-    advertencia.style.background = '#dc3545';
-    advertencia.style.color = 'white';
-    advertencia.style.padding = '12px 20px';
-    advertencia.style.borderRadius = '10px';
-    advertencia.style.fontWeight = 'bold';
-    advertencia.style.zIndex = 10000;
-    advertencia.style.boxShadow = '0 4px 10px rgba(0,0,0,0.3)';
-    document.body.appendChild(advertencia);
-    setTimeout(() => advertencia.remove(), 4000);
+ const nombre = productoSeleccionado.nombre;
+ const precio = productoSeleccionado.precio;
 
-  } else {
-    const nombre1 = mitadPendiente.nombre;
-    const nombre2 = nombre;
-    const precioFinal = Math.max(mitadPendiente.precio, precio);
-    const pedido = obtenerPedido();
-    pedido.push({ nombre: `Mitad ${nombre1} + Mitad ${nombre2}`, tipo: 'Mitad y Mitad', precio: precioFinal });
-    mitadPendiente = null;
-    guardarPedido(pedido);
-    renderizarPedido();
-    document.getElementById('modal').style.display = 'none';
-  }
-};
+ if(!mitadPendiente){
+  mitadPendiente = {nombre, precio};
+  document.getElementById("modal").style.display="none";
+  alert("Elegí la otra mitad");
+ }else{
+
+  const nombre1 = mitadPendiente.nombre;
+  const nombre2 = nombre;
+
+  push(pedidoRef,{
+   nombre:`½ ${nombre1} + ½ ${nombre2}`,
+   precio: Math.max(mitadPendiente.precio, precio),
+   cantidad:1
+  });
+
+  mitadPendiente = null;
+  document.getElementById("modal").style.display="none";
+ }
 };
 
+// CANCELAR
 document.getElementById("btn-cancelar").onclick=()=>{
  document.getElementById("modal").style.display="none";
 };
@@ -212,7 +208,7 @@ document.getElementById("btn-cancelar").onclick=()=>{
 // BORRAR
 document.getElementById("btn-borrar").onclick=()=>remove(pedidoRef);
 
-// ✅ FIX WHATSAPP
+// WHATSAPP
 document.getElementById("enviar-whatsapp").onclick=()=>{
  onValue(pedidoRef,(snap)=>{
   const data=snap.val();
