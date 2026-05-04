@@ -159,10 +159,51 @@ window.abrirPopup=(n,p)=>{
  document.getElementById("modal-titulo").innerText=n;
 };
 
-document.getElementById("btn-entera").onclick=()=>{
- const cant=parseInt(document.getElementById("cantidad-input").value)||1;
- push(pedidoRef,{...productoSeleccionado,cantidad:cant});
- document.getElementById("modal").style.display="none";
+document.getElementById("btn-entera").onclick = () => {
+  const nombre = document.getElementById('modal-titulo').textContent;
+  const precio = productosGlobal[nombre].precio;
+  const pedido = obtenerPedido();
+  pedido.push({ nombre, tipo: 'Entera', precio });
+  guardarPedido(pedido);
+  renderizarPedido();
+  document.getElementById('modal').style.display = 'none';
+};
+
+document.getElementById("btn-mitad").onclick = () => {
+  const nombre = document.getElementById('modal-titulo').textContent;
+  const precio = productosGlobal[nombre].precio;
+  if (!mitadPendiente) {
+    mitadPendiente = { nombre, precio };
+    document.getElementById('modal').style.display = 'none';
+
+    const advertencia = document.createElement('div');
+    advertencia.textContent = 'Seleccioná ahora la segunda mitad';
+    advertencia.style.position = 'fixed';
+    advertencia.style.top = '80%';
+    advertencia.style.left = '50%';
+    advertencia.style.transform = 'translate(-50%, -50%)';
+    advertencia.style.background = '#dc3545';
+    advertencia.style.color = 'white';
+    advertencia.style.padding = '12px 20px';
+    advertencia.style.borderRadius = '10px';
+    advertencia.style.fontWeight = 'bold';
+    advertencia.style.zIndex = 10000;
+    advertencia.style.boxShadow = '0 4px 10px rgba(0,0,0,0.3)';
+    document.body.appendChild(advertencia);
+    setTimeout(() => advertencia.remove(), 4000);
+
+  } else {
+    const nombre1 = mitadPendiente.nombre;
+    const nombre2 = nombre;
+    const precioFinal = Math.max(mitadPendiente.precio, precio);
+    const pedido = obtenerPedido();
+    pedido.push({ nombre: `Mitad ${nombre1} + Mitad ${nombre2}`, tipo: 'Mitad y Mitad', precio: precioFinal });
+    mitadPendiente = null;
+    guardarPedido(pedido);
+    renderizarPedido();
+    document.getElementById('modal').style.display = 'none';
+  }
+};
 };
 
 document.getElementById("btn-cancelar").onclick=()=>{
