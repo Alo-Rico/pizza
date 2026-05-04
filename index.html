@@ -139,197 +139,103 @@ if (!clienteId) {
   localStorage.setItem("clienteId", clienteId);
 }
 
-const pedidoRef = ref(db, "pedidos/" + clienteId);
-<script>
- function actualizarMensajeTotal() {
-  const pedido = JSON.parse(localStorage.getItem("carritoPedido")) || [];
-  const mensajeTotal = document.getElementById("mensaje-total");
-  if (!mensajeTotal) return;
-  if (pedido.length > 0) {
-    const total = pedido.reduce((sum, p) => sum + p.precio, 0);
-    mensajeTotal.textContent = `💰 Total: Gs. ${total.toLocaleString()}`;
-    mensajeTotal.style.display = "block";
-  } else {
-    mensajeTotal.style.display = "none";
-  }
-}
+// NAV
 
-const pedidoKey = "carritoPedido";
-let productosGlobal = {};
-let mitadPendiente = null;
+btnHamburguesas.onclick=()=>location.href="https://alo-rico.github.io/hamburguesa/";
+btnLomitos.onclick=()=>location.href="https://alo-rico.github.io/lomitos/";
+btnBebidas.onclick=()=>location.href="https://alo-rico.github.io/bebidas/";
+btnCarrito.onclick = () => {
+ document.getElementById("pedido-flotante").classList.toggle("activo");
+};
 
-// ✅ detectar categoría por carpeta y armar carpeta de imágenes
-const _parts = window.location.pathname.split("/").filter(Boolean);
-const _cat   = (_parts[_parts.length - 1] || "pizzas").toLowerCase();
-const _map   = { pizza:"pizzas", lomito:"lomitos", hamburguesa:"hamburguesas", bebida:"bebidas", pizzas:"pizzas", lomitos:"lomitos", hamburguesas:"hamburguesas", bebidas:"bebidas" };
-const categoriaPlural = _map[_cat] || _cat;
-const IMG_DIR = `img-${categoriaPlural}/`; // ✅ p.ej. img-pizzas/
+// ESCUCHAR PEDIDO
+onValue(pedidoRef, (snapshot) => {
+  const data = snapshot.val();
+  const lista = document.getElementById("lista-pedido");
+  const totalTxt = document.getElementById("total-pedido");
+  const mensaje = document.getElementById("mensaje-total");
 
-function obtenerPedido() { return JSON.parse(localStorage.getItem(pedidoKey)) || []; }
-function guardarPedido(pedido) { localStorage.setItem(pedidoKey, JSON.stringify(pedido)); }
-
-function renderizarPedido() {
-  const listaPedido = document.getElementById("lista-pedido");
-  const pedido = obtenerPedido();
-  listaPedido.innerHTML = "";
+  lista.innerHTML = "";
   let total = 0;
-  pedido.forEach((p, i) => {
-    const infoProd = productosGlobal[p.nombre] || {};
-    const ingredientes = infoProd.ingredientes || '';
-    // ✅ si la imagen no trae carpeta, le anteponemos IMG_DIR
-    const rawImg = infoProd.imagen || 'icon-carrito.png';
-    const thumbSrc = rawImg.includes('/') ? rawImg : (IMG_DIR + rawImg);
 
-    const li = document.createElement("li");
-    li.innerHTML =
-      `<div class='info'>
-         <img src="${thumbSrc}" class='thumb'>
-         <span>${p.nombre}</span> Gs. ${p.precio.toLocaleString()}
-         <img src='basurero.png' onclick='eliminarItem(${i})' style='width:18px;cursor:pointer;margin-left:5px;'/>
-       </div>
-       <div class='ingredientes'>${ingredientes}</div>`;
-    listaPedido.appendChild(li);
-    total += p.precio;
-  });
-  actualizarMensajeTotal();
-  document.getElementById("total-pedido").textContent = `Total: Gs. ${total.toLocaleString()}`;
-}
-
-function eliminarItem(index) {
-  const pedido = obtenerPedido();
-  pedido.splice(index, 1);
-  guardarPedido(pedido);
-  renderizarPedido();
-  actualizarMensajeTotal();
-}
-
-document.getElementById("btn-borrar").onclick = () => {
-  localStorage.removeItem(pedidoKey);
-  renderizarPedido();
-  actualizarMensajeTotal();
-  document.getElementById("pedido-flotante").classList.remove("activo");
-};
-
-document.getElementById("enviar-whatsapp").onclick = () => {
-  const pedido = obtenerPedido();
-  if (pedido.length === 0) return alert("No hay nada en el pedido");
-  const mensaje = pedido.map(p => `- ${p.nombre}`).join('%0A');
-  const total = pedido.reduce((sum, p) => sum + p.precio, 0);
-  const texto = `Hola, Estoy ingresando desde la Plataforma:%0A${mensaje}%0A%0ATotal: Gs. ${total.toLocaleString()}`;
-  window.open(`https://wa.me/+595971891251?text=${texto}`, '_blank');
-
-  localStorage.removeItem(pedidoKey);
-  renderizarPedido();
-  actualizarMensajeTotal();
-  document.getElementById("pedido-flotante").classList.remove("activo");
-};
-
-document.getElementById("btn-cancelar").onclick = () => {
-  document.getElementById('modal').style.display = 'none';
-  mitadPendiente = null;
-};
-
-document.getElementById("btn-entera").onclick = () => {
-  const nombre = document.getElementById('modal-titulo').textContent;
-  const precio = productosGlobal[nombre].precio;
-  const pedido = obtenerPedido();
-  pedido.push({ nombre, tipo: 'Entera', precio });
-  guardarPedido(pedido);
-  renderizarPedido();
-  document.getElementById('modal').style.display = 'none';
-};
-
-document.getElementById("btn-mitad").onclick = () => {
-  const nombre = document.getElementById('modal-titulo').textContent;
-  const precio = productosGlobal[nombre].precio;
-  if (!mitadPendiente) {
-    mitadPendiente = { nombre, precio };
-    document.getElementById('modal').style.display = 'none';
-
-    const advertencia = document.createElement('div');
-    advertencia.textContent = 'Seleccioná ahora la segunda mitad';
-    advertencia.style.position = 'fixed';
-    advertencia.style.top = '80%';
-    advertencia.style.left = '50%';
-    advertencia.style.transform = 'translate(-50%, -50%)';
-    advertencia.style.background = '#dc3545';
-    advertencia.style.color = 'white';
-    advertencia.style.padding = '12px 20px';
-    advertencia.style.borderRadius = '10px';
-    advertencia.style.fontWeight = 'bold';
-    advertencia.style.zIndex = 10000;
-    advertencia.style.boxShadow = '0 4px 10px rgba(0,0,0,0.3)';
-    document.body.appendChild(advertencia);
-    setTimeout(() => advertencia.remove(), 4000);
-
-  } else {
-    const nombre1 = mitadPendiente.nombre;
-    const nombre2 = nombre;
-    const precioFinal = Math.max(mitadPendiente.precio, precio);
-    const pedido = obtenerPedido();
-    pedido.push({ nombre: `Mitad ${nombre1} + Mitad ${nombre2}`, tipo: 'Mitad y Mitad', precio: precioFinal });
-    mitadPendiente = null;
-    guardarPedido(pedido);
-    renderizarPedido();
-    document.getElementById('modal').style.display = 'none';
-  }
-};
-
-document.getElementById("btnCarrito").addEventListener("click", () => {
-  document.getElementById("pedido-flotante").classList.toggle("activo");
-});
-
-document.addEventListener("click", function(e) {
-  const panel = document.getElementById("pedido-flotante");
-  const boton = document.getElementById("btnCarrito");
-  if (e.target.tagName === "IMG" && e.target.src.includes("basurero.png")) return;
-  if (panel.classList.contains("activo") && !panel.contains(e.target) && e.target !== boton) {
-    panel.classList.remove("activo");
-  }
-});
-
-document.getElementById("btnHamburguesas").onclick = () => window.location.href='https://menu-principal-alo-rico.netlify.app/hamburguesas/';
-document.getElementById("btnBebidas").onclick = () => window.location.href='https://menu-principal-alo-rico.netlify.app/bebidas/';
-document.getElementById("btnLomitos").onclick = () => window.location.href='https://menu-principal-alo-rico.netlify.app/lomitos/';
-
-document.addEventListener("DOMContentLoaded", async () => {
-  if (localStorage.getItem("pedidoEnviado")) {
-    localStorage.removeItem("carritoPedido");
-    localStorage.removeItem("pedidoEnviado");
-  }
-
-  renderizarPedido();
-
-  try {
-    const res = await fetch("precios.json"); // debe estar en la misma carpeta que este index.html
-    const productos = await res.json();
-    productosGlobal = productos;
-
-    const menu = document.getElementById('menu');
-    menu.innerHTML = '';
-
-    Object.entries(productos).forEach(([nombre, info]) => {
-      const card = document.createElement('div');
-      card.className = 'product';
-      // ✅ si info.imagen no trae carpeta, prependo IMG_DIR
-      const imgSrc = (info.imagen && info.imagen.includes('/')) ? info.imagen : (IMG_DIR + (info.imagen || 'noimg.jpg'));
-      card.innerHTML = `
-        <img src="${imgSrc}" alt="${nombre}" class="img-click">
-        <h3>${nombre}</h3>
-        <p><strong>Gs. ${Number(info.precio||0).toLocaleString()}</strong></p>
-        <p style="font-size: 0.85em; color: #666;">${info.ingredientes || ''}</p>
-      `;
-      card.addEventListener('click', () => {
-        document.getElementById('modal-titulo').textContent = nombre;
-        document.getElementById('modal').style.display = 'flex';
-      });
-      menu.appendChild(card);
+  if (data) {
+    Object.entries(data).forEach(([key, p]) => {
+      const li = document.createElement("li");
+      li.innerHTML = `${p.cantidad} x ${p.nombre} - Gs. ${(p.precio*p.cantidad).toLocaleString()}`;
+      lista.appendChild(li);
+      total += p.precio * p.cantidad;
     });
-  } catch (err) {
-    console.error(err);
-    document.getElementById('menu').innerHTML = "<p style='color:red;'>No se pudo cargar el menú</p>";
+
+    totalTxt.innerText = "Total: Gs. " + total.toLocaleString();
+    mensaje.innerText = "💰 Total: Gs. " + total.toLocaleString();
+    mensaje.style.display = "block";
+  } else {
+    totalTxt.innerText = "";
+    mensaje.style.display = "none";
   }
 });
+
+// AGREGAR PRODUCTO
+window.confirmarCantidad = function(){
+ const cant = parseInt(document.getElementById("popup-input").value)||1;
+
+ push(pedidoRef, {
+  nombre: productoSeleccionado.nombre,
+  precio: productoSeleccionado.precio,
+  cantidad: cant
+ });
+
+ cerrarPopup();
+};
+
+let productoSeleccionado = {};
+
+window.abrirPopup = (n,p)=>{
+ productoSeleccionado={nombre:n,precio:p};
+ document.getElementById("popup-nombre").innerText=n;
+ document.getElementById("popup-cantidad").style.display="flex";
+};
+
+window.cerrarPopup = ()=>{
+ document.getElementById("popup-cantidad").style.display="none";
+};
+
+// BORRAR
+document.getElementById("btn-borrar").onclick = ()=> remove(pedidoRef);
+
+// WHATSAPP
+document.getElementById("enviar-whatsapp").onclick = ()=>{
+ onValue(pedidoRef,(snap)=>{
+  const data=snap.val();
+  if(!data) return alert("Vacío");
+
+  let msg="Hola quiero pedir:\n";
+  let total=0;
+
+  Object.values(data).forEach(p=>{
+   msg+=`${p.cantidad} x ${p.nombre}\n`;
+   total+=p.precio*p.cantidad;
+  });
+
+  msg+=`\nTotal: Gs. ${total.toLocaleString()}`;
+  window.open("https://wa.me/?text="+encodeURIComponent(msg));
+ },{onlyOnce:true});
+};
+
+// CARGAR MENU
+const res = await fetch("https://raw.githubusercontent.com/Alo-Rico/pizza/main/precios.json");
+const productos = await res.json();
+const menu = document.getElementById("menu");
+
+Object.entries(productos).forEach(([n,i])=>{
+ const card=document.createElement("div");
+ card.className="product";
+ card.innerHTML=`<img src="imagen/${i.imagen}"><h3>${n}</h3><p>Gs. ${i.precio}</p>`;
+ card.onclick=()=>abrirPopup(n,i.precio);
+ menu.appendChild(card);
+});
+
 </script>
+
 </body>
 </html>
