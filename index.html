@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -90,6 +91,7 @@ header h1 { color:#c24a00; }
   border-top:2px solid #c24a00;
 }
 </style>
+
 </head>
 
 <body>
@@ -103,6 +105,7 @@ header h1 { color:#c24a00; }
 <div id="menu" class="menu-container"></div>
 
 <!-- MODAL -->
+
 <div id="modal" class="modal">
   <div class="modal-content">
     <h2 id="titulo"></h2>
@@ -113,6 +116,7 @@ header h1 { color:#c24a00; }
 </div>
 
 <!-- PANEL PEDIDO -->
+
 <div id="pedido-flotante">
   <h3>Mi Pedido</h3>
   <ul id="lista-pedido"></ul>
@@ -122,6 +126,7 @@ header h1 { color:#c24a00; }
 </div>
 
 <!-- BOTONES -->
+
 <div class="btn-grid">
   <button id="btnHamburguesas" class="btn-flotante">HAMBURGUESAS</button>
   <button id="btnLomitos" class="btn-flotante">LOMITOS</button>
@@ -155,18 +160,14 @@ let mitadPendiente = null;
 const modal = document.getElementById("modal");
 const titulo = document.getElementById("titulo");
 
-// =======================
 // CLICK PRODUCTO
-// =======================
 function abrirProducto(nombre, precio){
   productoActual = {nombre, precio};
   titulo.innerText = nombre;
   modal.style.display = "flex";
 }
 
-// =======================
 // MODAL
-// =======================
 document.getElementById("cancelar").onclick = () => modal.style.display = "none";
 
 document.getElementById("entera").onclick = () => {
@@ -195,14 +196,14 @@ document.getElementById("mitad").onclick = () => {
   }
 };
 
-// =======================
-// RENDER PEDIDO
-// =======================
+// 🔥 RENDER PEDIDO + BOTÓN VERDE
 onValue(pedidoRef, snap=>{
   const data = snap.val();
   const lista = document.getElementById("lista-pedido");
-  lista.innerHTML = "";
+  const panel = document.getElementById("pedido-flotante");
+  const btn = document.getElementById("btnCarrito");
 
+  lista.innerHTML = "";
   let total = 0;
 
   if(data){
@@ -212,27 +213,32 @@ onValue(pedidoRef, snap=>{
       lista.appendChild(li);
       total += p.precio;
     });
+
+    panel.style.display = "block";
+    btn.innerText = "Gs. " + total.toLocaleString();
+    btn.style.background = "#28a745";
+
+  } else {
+    panel.style.display = "none";
+    btn.innerText = "MI PEDIDO";
+    btn.style.background = "#007bff";
   }
 
-  document.getElementById("total-pedido").innerText = "Total: Gs. " + total.toLocaleString();
+  document.getElementById("total-pedido").innerText =
+    "Total: Gs. " + total.toLocaleString();
 });
 
-// =======================
 // BOTONES
-// =======================
 btnHamburguesas.onclick=()=>location.href="https://alo-rico.github.io/hamburguesa/";
 btnLomitos.onclick=()=>location.href="https://alo-rico.github.io/lomitos/";
 btnBebidas.onclick=()=>location.href="https://alo-rico.github.io/bebidas/";
 
-// 👉 ESTE ES EL ARREGLO IMPORTANTE
 btnCarrito.onclick=()=>{
   const panel = document.getElementById("pedido-flotante");
   panel.style.display = panel.style.display === "block" ? "none" : "block";
 };
 
-// =======================
 // BORRAR / ENVIAR
-// =======================
 document.getElementById("btn-borrar").onclick = ()=> remove(pedidoRef);
 
 document.getElementById("btn-enviar").onclick = ()=>{
@@ -253,9 +259,7 @@ document.getElementById("btn-enviar").onclick = ()=>{
   },{onlyOnce:true});
 };
 
-// =======================
-// CARGAR MENU
-// =======================
+// CARGAR MENU (SIN TOCAR RUTA)
 const res = await fetch("https://alo-rico.github.io/pizza/precios.json");
 const data = await res.json();
 
