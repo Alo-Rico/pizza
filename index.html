@@ -223,7 +223,7 @@ document.getElementById("enviar-whatsapp").onclick = ()=>{
 };
 
 // CARGAR MENU
-const res = await fetch("https://raw.githubusercontent.com/Alo-Rico/pizza/main/precios.json");
+const res = await fetch("precios.json");
 const productos = await res.json();
 const menu = document.getElementById("menu");
 
