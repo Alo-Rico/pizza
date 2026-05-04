@@ -209,22 +209,18 @@ window.cerrarPopup = ()=>{
 document.getElementById("btn-borrar").onclick = ()=> remove(pedidoRef);
 
 // WHATSAPP
-document.getElementById("enviar-whatsapp").onclick = ()=>{
- onValue(pedidoRef,(snap)=>{
-  const data=snap.val();
-  if(!data) return alert("Vacío");
+document.getElementById("enviar-whatsapp").onclick = () => {
+  const pedido = obtenerPedido();
+  if (pedido.length === 0) return alert("No hay nada en el pedido");
+  const mensaje = pedido.map(p => `- ${p.nombre}`).join('%0A');
+  const total = pedido.reduce((sum, p) => sum + p.precio, 0);
+  const texto = `Hola, Estoy ingresando desde la Plataforma:%0A${mensaje}%0A%0ATotal: Gs. ${total.toLocaleString()}`;
+  window.open(`https://wa.me/+595971891251?text=${texto}`, '_blank');
 
-  let msg="Hola quiero pedir:\n";
-  let total=0;
-
-  Object.values(data).forEach(p=>{
-   msg+=`${p.cantidad} x ${p.nombre}\n`;
-   total+=p.precio*p.cantidad;
-  });
-
-  msg+=`\nTotal: Gs. ${total.toLocaleString()}`;
-  window.open("https://wa.me/?text="+encodeURIComponent(msg));
- },{onlyOnce:true});
+  localStorage.removeItem(pedidoKey);
+  renderizarPedido();
+  actualizarMensajeTotal();
+  document.getElementById("pedido-flotante").classList.remove("activo");
 };
 
 // CARGAR MENU
