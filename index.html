@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="es">
 <head>
 <meta charset="utf-8"/>
@@ -16,296 +17,131 @@
     .product img { width: 100%; height: 140px; object-fit: cover; border-radius: 10px 10px 0 0; }
     .product h3 { margin: 10px 0 5px; font-size: 16px; }
     .product p { margin: 0 0 10px; color: #444; font-weight: bold; }
-    .btn-grid {
-        position: fixed;
-        right: 15px;
-        bottom: 15px;
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 10px;
-        z-index: 9998;
-    }
-    .btn-flotante {
-        color: #fff;
-        border: none;
-        padding: 12px 18px;
-        border-radius: 50px;
-        font-weight: bold;
-        cursor: pointer;
-        width: 140px;
-        text-align: center;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-        font-size: 14px;
-    }
+    .btn-grid { position: fixed; right: 15px; bottom: 15px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; z-index: 9998; }
+    .btn-flotante { color: #fff; border: none; padding: 12px 18px; border-radius: 50px; font-weight: bold; cursor: pointer; width: 140px; }
     #btnBebidas { background-color: #007bff; }
     #btnHamburguesas { background-color: #28a745; }
     #btnLomitos { background-color: #ffc107; color: #000; }
     #btnCarrito { background-color: #ff5722; }
-
-    #pedido-flotante {
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%) scale(0);
-        width: 400px;
-        max-width: 90%;
-        background-color: #fff;
-        box-shadow: 0 0 15px rgba(0,0,0,0.4);
-        transition: transform 0.3s ease;
-        z-index: 10000;
-        padding: 15px;
-        border-radius: 10px;
-    }
-    #pedido-flotante.activo {
-        transform: translate(-50%, -50%) scale(1);
-    }
-    #pedido-flotante ul { list-style-type: none; padding: 0; }
-    #pedido-flotante li { display: flex; flex-direction: column; align-items: flex-start; margin-bottom: 10px; border-bottom: 1px solid #ddd; padding-bottom: 5px; }
-    #pedido-flotante li .info { display: flex; align-items: center; width: 100%; justify-content: space-between; }
-    #pedido-flotante li img.thumb { width: 50px; height: 50px; object-fit: cover; border-radius: 5px; margin-right: 8px; }
-    #pedido-flotante li .ingredientes { font-size: 12px; color: #666; margin-left: 58px; text-align: left; }
-    #pedido-flotante button { background-color: green; color: white; border: none; margin: 5px; padding: 8px 10px; border-radius: 4px; cursor: pointer; }
-    #pedido-flotante button.borrar { background-color: red; }
-    svg { width: 18px; height: 18px; }
+    #mensaje-total { display:none;background:#28a745;color:#fff;padding:8px;border-radius:10px;grid-column:span 2;font-weight:bold; }
+    #pedido-flotante { position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(0);background:#fff;padding:15px;border-radius:10px; }
+    #pedido-flotante.activo { transform:translate(-50%,-50%) scale(1); }
 </style>
 </head>
+
 <body>
+
 <header>
-<img alt="Logo Alo Rico" class="logo" src="logo.png"/>
+<img src="logo.png" class="logo">
 <h1>Menú de Pizzas</h1>
-<img alt="Repartidor" class="icono" src="Repartidor.png"/>
+<img src="Repartidor.png" class="icono">
 </header>
 
-<div class="menu-container" id="menu"></div>
-
-<div id="modal" class="modal" style="display:none;position:fixed;z-index:999;left:0;top:0;width:100%;height:100%;background-color:rgba(0,0,0,0.6);justify-content:center;align-items:center;">
-  <div style="background:white;padding:20px;border-radius:10px;max-width:350px;text-align:center;box-shadow:0 4px 10px rgba(0,0,0,0.3);">
-    <h2 id="modal-titulo" style="margin-bottom:10px;color:#c24a00;"></h2>
-    <label for="cantidad-input" style="display:block;margin-bottom:6px;">Cantidad:</label>
-    <input type="number" id="cantidad-input" value="1" min="1" style="width:80px;font-size:18px;text-align:center;margin-bottom:12px;">
-    <div style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center;">
-      <button id="btn-entera" style="background:#28a745;color:white;padding:10px 12px;border:none;border-radius:6px;cursor:pointer;font-weight:bold;">🍕Entera</button>
-      <button id="btn-mitad" style="background:#ffc107;color:black;padding:10px 12px;border:none;border-radius:6px;cursor:pointer;font-weight:bold;">½ Mitad</button>
-      <button id="btn-cancelar" style="background:#dc3545;color:white;padding:10px 12px;border:none;border-radius:6px;cursor:pointer;font-weight:bold;">Cancelar</button>
-    </div>
-  </div>
-</div>
+<div id="menu" class="menu-container"></div>
 
 <div class="btn-grid">
-  <div id="mensaje-total" onclick="document.getElementById('btnCarrito').click();" style="display:none;background:#28a745;color:#fff;padding:8px 14px;margin-bottom:5px;border-radius:10px;font-weight:bold;box-shadow:0 4px 8px rgba(0,0,0,0.3);grid-column:span 2;text-align:center;">
-    💰 Total: Gs. 0
-  </div>
-  <button id="btnHamburguesas" class="btn-flotante"><svg viewBox="0 0 24 24" fill="white"><path d="M3 6h18v2H3V6zm0 5h18v2H3v-2zm0 5h18v2H3v-2z"/></svg> HAMBURGUESAS</button>
-  <button id="btnBebidas" class="btn-flotante"><svg viewBox="0 0 24 24" fill="white"><path d="M7 2v2h10V2h2v2h1v2h-1v2h1v2h-1v2h1v2h-1v8H6v-8H5v-2h1v-2H5V8h1V6H5V4h1V2h1zm2 6v2h6V8H9z"/></svg> BEBIDAS</button>
-  <button id="btnLomitos" class="btn-flotante"><svg viewBox="0 0 24 24" fill="black"><circle cx="12" cy="12" r="8"/></svg> LOMITOS</button>
-  <button id="btnCarrito" class="btn-flotante">
-    <svg viewBox="0 0 32 32" width="24" height="24" fill="white">
-      <path d="M16.003 3.002c-7.181 0-13.001 5.82-13.001 13 0 2.301.601 4.56 1.743 6.553L3.002 29l6.614-1.711a13.003 13.003 0 006.387 1.625h.001c7.181 0 13.001-5.82 13.001-13s-5.82-13-13.002-13zm0 23.998a11.19 11.19 0 01-5.719-1.562l-.41-.242-3.925 1.016 1.047-3.827-.268-.396A11.189 11.189 0 014.812 16c0-6.176 5.015-11.191 11.191-11.191S27.194 9.824 27.194 16s-5.015 11.191-11.191 11.191zm6.155-8.489c-.337-.168-1.995-.984-2.304-1.096-.308-.112-.532-.168-.756.168-.224.336-.868 1.096-1.064 1.32-.196.224-.393.252-.73.084-.336-.168-1.419-.522-2.703-1.664-1-.893-1.674-1.992-1.87-2.327-.196-.336-.021-.518.147-.686.151-.15.336-.393.504-.589.168-.196.224-.336.336-.561.112-.224.056-.42-.028-.588-.084-.168-.756-1.823-1.036-2.493-.272-.652-.548-.562-.756-.571-.196-.008-.42-.01-.644-.01s-.588.084-.896.42c-.308.336-1.176 1.148-1.176 2.799 0 1.651 1.204 3.247 1.37 3.472.168.224 2.366 3.612 5.738 5.063.802.345 1.427.55 1.915.704.805.256 1.536.22 2.115.134.645-.096 1.995-.816 2.277-1.604.28-.787.28-1.462.196-1.604-.084-.14-.308-.224-.645-.393z"/>
-    </svg> MI PEDIDO
-  </button>
+<div id="mensaje-total">💰 Total: Gs. 0</div>
+<button id="btnHamburguesas" class="btn-flotante">HAMBURGUESAS</button>
+<button id="btnBebidas" class="btn-flotante">BEBIDAS</button>
+<button id="btnLomitos" class="btn-flotante">LOMITOS</button>
+<button id="btnCarrito" class="btn-flotante">MI PEDIDO</button>
 </div>
 
 <div id="pedido-flotante">
-  <h3>Mi Pedido</h3>
-  <ul id="lista-pedido"></ul>
-  <p id="total-pedido"></p>
-  <button class="borrar" id="btn-borrar">Borrar todo</button>
-  <button class="whatsapp" id="enviar-whatsapp">Enviar pedido</button>
+<h3>Mi Pedido</h3>
+<ul id="lista-pedido"></ul>
+<p id="total-pedido"></p>
+<button id="btn-borrar">Borrar todo</button>
 </div>
 
-<script>
- function actualizarMensajeTotal() {
-  const pedido = JSON.parse(localStorage.getItem("carritoPedido")) || [];
-  const mensajeTotal = document.getElementById("mensaje-total");
-  if (!mensajeTotal) return;
-  if (pedido.length > 0) {
-    const total = pedido.reduce((sum, p) => sum + p.precio, 0);
-    mensajeTotal.textContent = `💰 Total: Gs. ${total.toLocaleString()}`;
-    mensajeTotal.style.display = "block";
-  } else {
-    mensajeTotal.style.display = "none";
-  }
+<!-- 🔥 FIREBASE -->
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
+import { getDatabase, ref, push, onValue, remove } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyADGYsqhbCFuKj2fXpontLpND_rtT7Nlno",
+  authDomain: "alorico-59754.firebaseapp.com",
+  databaseURL: "https://alorico-59754-default-rtdb.firebaseio.com",
+  projectId: "alorico-59754",
+  storageBucket: "alorico-59754.firebasestorage.app",
+  messagingSenderId: "120993494626",
+  appId: "1:120993494626:web:9f9cb0ad6fbfbd1abd033b"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+let clienteId = localStorage.getItem("clienteId");
+if (!clienteId) {
+  clienteId = "cliente_" + Date.now();
+  localStorage.setItem("clienteId", clienteId);
 }
 
-const pedidoKey = "carritoPedido";
-let productosGlobal = {};
-let mitadPendiente = null;
+const pedidoRef = ref(db, "pedidos/" + clienteId);
 
-// ✅ detectar categoría por carpeta y armar carpeta de imágenes
-const _parts = window.location.pathname.split("/").filter(Boolean);
-const _cat   = (_parts[_parts.length - 1] || "pizzas").toLowerCase();
-const _map   = { pizza:"pizzas", lomito:"lomitos", hamburguesa:"hamburguesas", bebida:"bebidas", pizzas:"pizzas", lomitos:"lomitos", hamburguesas:"hamburguesas", bebidas:"bebidas" };
-const categoriaPlural = _map[_cat] || _cat;
-const IMG_DIR = `img-${categoriaPlural}/`; // ✅ p.ej. img-pizzas/
-
-function obtenerPedido() { return JSON.parse(localStorage.getItem(pedidoKey)) || []; }
-function guardarPedido(pedido) { localStorage.setItem(pedidoKey, JSON.stringify(pedido)); }
-
-function renderizarPedido() {
-  const listaPedido = document.getElementById("lista-pedido");
-  const pedido = obtenerPedido();
-  listaPedido.innerHTML = "";
-  let total = 0;
-  pedido.forEach((p, i) => {
-    const infoProd = productosGlobal[p.nombre] || {};
-    const ingredientes = infoProd.ingredientes || '';
-    // ✅ si la imagen no trae carpeta, le anteponemos IMG_DIR
-    const rawImg = infoProd.imagen || 'icon-carrito.png';
-    const thumbSrc = rawImg.includes('/') ? rawImg : (IMG_DIR + rawImg);
-
-    const li = document.createElement("li");
-    li.innerHTML =
-      `<div class='info'>
-         <img src="${thumbSrc}" class='thumb'>
-         <span>${p.nombre}</span> Gs. ${p.precio.toLocaleString()}
-         <img src='basurero.png' onclick='eliminarItem(${i})' style='width:18px;cursor:pointer;margin-left:5px;'/>
-       </div>
-       <div class='ingredientes'>${ingredientes}</div>`;
-    listaPedido.appendChild(li);
-    total += p.precio;
-  });
-  actualizarMensajeTotal();
-  document.getElementById("total-pedido").textContent = `Total: Gs. ${total.toLocaleString()}`;
+// 🔁 REEMPLAZA lectura
+function obtenerPedido(callback){
+  onValue(pedidoRef,(snap)=>{
+    const data = snap.val();
+    callback(data ? Object.values(data) : []);
+  },{onlyOnce:true});
 }
 
-function eliminarItem(index) {
-  const pedido = obtenerPedido();
-  pedido.splice(index, 1);
-  guardarPedido(pedido);
-  renderizarPedido();
-  actualizarMensajeTotal();
+// 🔁 REEMPLAZA guardado
+function guardarPedido(pedido){
+  remove(pedidoRef);
+  pedido.forEach(p=>push(pedidoRef,p));
 }
 
-document.getElementById("btn-borrar").onclick = () => {
-  localStorage.removeItem(pedidoKey);
-  renderizarPedido();
-  actualizarMensajeTotal();
-  document.getElementById("pedido-flotante").classList.remove("activo");
-};
-
-document.getElementById("enviar-whatsapp").onclick = () => {
-  const pedido = obtenerPedido();
-  if (pedido.length === 0) return alert("No hay nada en el pedido");
-  const mensaje = pedido.map(p => `- ${p.nombre}`).join('%0A');
-  const total = pedido.reduce((sum, p) => sum + p.precio, 0);
-  const texto = `Hola, Estoy ingresando desde la Plataforma:%0A${mensaje}%0A%0ATotal: Gs. ${total.toLocaleString()}`;
-  window.open(`https://wa.me/+595971891251?text=${texto}`, '_blank');
-
-  localStorage.removeItem(pedidoKey);
-  renderizarPedido();
-  actualizarMensajeTotal();
-  document.getElementById("pedido-flotante").classList.remove("activo");
-};
-
-document.getElementById("btn-cancelar").onclick = () => {
-  document.getElementById('modal').style.display = 'none';
-  mitadPendiente = null;
-};
-
-document.getElementById("btn-entera").onclick = () => {
-  const nombre = document.getElementById('modal-titulo').textContent;
-  const precio = productosGlobal[nombre].precio;
-  const pedido = obtenerPedido();
-  pedido.push({ nombre, tipo: 'Entera', precio });
-  guardarPedido(pedido);
-  renderizarPedido();
-  document.getElementById('modal').style.display = 'none';
-};
-
-document.getElementById("btn-mitad").onclick = () => {
-  const nombre = document.getElementById('modal-titulo').textContent;
-  const precio = productosGlobal[nombre].precio;
-  if (!mitadPendiente) {
-    mitadPendiente = { nombre, precio };
-    document.getElementById('modal').style.display = 'none';
-
-    const advertencia = document.createElement('div');
-    advertencia.textContent = 'Seleccioná ahora la segunda mitad';
-    advertencia.style.position = 'fixed';
-    advertencia.style.top = '80%';
-    advertencia.style.left = '50%';
-    advertencia.style.transform = 'translate(-50%, -50%)';
-    advertencia.style.background = '#dc3545';
-    advertencia.style.color = 'white';
-    advertencia.style.padding = '12px 20px';
-    advertencia.style.borderRadius = '10px';
-    advertencia.style.fontWeight = 'bold';
-    advertencia.style.zIndex = 10000;
-    advertencia.style.boxShadow = '0 4px 10px rgba(0,0,0,0.3)';
-    document.body.appendChild(advertencia);
-    setTimeout(() => advertencia.remove(), 4000);
-
-  } else {
-    const nombre1 = mitadPendiente.nombre;
-    const nombre2 = nombre;
-    const precioFinal = Math.max(mitadPendiente.precio, precio);
-    const pedido = obtenerPedido();
-    pedido.push({ nombre: `Mitad ${nombre1} + Mitad ${nombre2}`, tipo: 'Mitad y Mitad', precio: precioFinal });
-    mitadPendiente = null;
-    guardarPedido(pedido);
-    renderizarPedido();
-    document.getElementById('modal').style.display = 'none';
-  }
-};
-
-document.getElementById("btnCarrito").addEventListener("click", () => {
-  document.getElementById("pedido-flotante").classList.toggle("activo");
-});
-
-document.addEventListener("click", function(e) {
-  const panel = document.getElementById("pedido-flotante");
-  const boton = document.getElementById("btnCarrito");
-  if (e.target.tagName === "IMG" && e.target.src.includes("basurero.png")) return;
-  if (panel.classList.contains("activo") && !panel.contains(e.target) && e.target !== boton) {
-    panel.classList.remove("activo");
-  }
-});
-
-document.getElementById("btnHamburguesas").onclick = () => window.location.href='https://menu-principal-alo-rico.netlify.app/hamburguesas/';
-document.getElementById("btnBebidas").onclick = () => window.location.href='https://menu-principal-alo-rico.netlify.app/bebidas/';
-document.getElementById("btnLomitos").onclick = () => window.location.href='https://menu-principal-alo-rico.netlify.app/lomitos/';
-
-document.addEventListener("DOMContentLoaded", async () => {
-  if (localStorage.getItem("pedidoEnviado")) {
-    localStorage.removeItem("carritoPedido");
-    localStorage.removeItem("pedidoEnviado");
-  }
-
-  renderizarPedido();
-
-  try {
-    const res = await fetch("precios.json"); // debe estar en la misma carpeta que este index.html
-    const productos = await res.json();
-    productosGlobal = productos;
-
-    const menu = document.getElementById('menu');
-    menu.innerHTML = '';
-
-    Object.entries(productos).forEach(([nombre, info]) => {
-      const card = document.createElement('div');
-      card.className = 'product';
-      // ✅ si info.imagen no trae carpeta, prependo IMG_DIR
-      const imgSrc = (info.imagen && info.imagen.includes('/')) ? info.imagen : (IMG_DIR + (info.imagen || 'noimg.jpg'));
-      card.innerHTML = `
-        <img src="${imgSrc}" alt="${nombre}" class="img-click">
-        <h3>${nombre}</h3>
-        <p><strong>Gs. ${Number(info.precio||0).toLocaleString()}</strong></p>
-        <p style="font-size: 0.85em; color: #666;">${info.ingredientes || ''}</p>
-      `;
-      card.addEventListener('click', () => {
-        document.getElementById('modal-titulo').textContent = nombre;
-        document.getElementById('modal').style.display = 'flex';
-      });
-      menu.appendChild(card);
+// 🔁 RENDER
+function render(){
+  obtenerPedido(pedido=>{
+    let total=0;
+    const lista=document.getElementById("lista-pedido");
+    lista.innerHTML="";
+    pedido.forEach(p=>{
+      total+=p.precio;
+      const li=document.createElement("li");
+      li.textContent=p.nombre+" - Gs. "+p.precio;
+      lista.appendChild(li);
     });
-  } catch (err) {
-    console.error(err);
-    document.getElementById('menu').innerHTML = "<p style='color:red;'>No se pudo cargar el menú</p>";
-  }
+
+    document.getElementById("mensaje-total").style.display=pedido.length?"block":"none";
+    document.getElementById("mensaje-total").innerText="💰 Total: Gs. "+total.toLocaleString();
+    document.getElementById("total-pedido").innerText="Total: Gs. "+total;
+  });
+}
+
+// BORRAR
+document.getElementById("btn-borrar").onclick=()=>remove(pedidoRef);
+
+// BOTÓN
+btnCarrito.onclick=()=>document.getElementById("pedido-flotante").classList.toggle("activo");
+
+// MENU
+const res = await fetch("precios.json");
+const data = await res.json();
+
+const menu=document.getElementById("menu");
+
+Object.entries(data).forEach(([n,i])=>{
+  const card=document.createElement("div");
+  card.className="product";
+  card.innerHTML=`<img src="${i.imagen}"><h3>${n}</h3><p>Gs. ${i.precio}</p>`;
+  card.onclick=()=>{
+    obtenerPedido(p=>{
+      p.push({nombre:n,precio:i.precio});
+      guardarPedido(p);
+      render();
+    });
+  };
+  menu.appendChild(card);
 });
+
+render();
 </script>
+
 </body>
 </html>
