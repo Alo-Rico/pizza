@@ -27,7 +27,7 @@
   "Margarita": {
     "precio": 42000,
     "ingredientes": "Tomates en rodajas, albahaca fresca",
-    "imagen": "img-pizza/margarita.jpeg"
+    "imagen": "img-pizza/margarita.jpg"
   },
   "Travieza": {
     "precio": 48000,
