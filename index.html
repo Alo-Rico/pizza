@@ -51,16 +51,54 @@ header img.icono { width: 60px; }
 
 #pedido-flotante{
  position:fixed;
- top:50%;
+ bottom:20px;
  left:50%;
- transform:translate(-50%,-50%) scale(0);
+ transform:translateX(-50%) translateY(120px);
  background:#fff;
- padding:15px;
- border-radius:10px;
+ padding:18px;
+ border-radius:15px;
+ box-shadow:0 12px 35px rgba(0,0,0,0.25);
+ opacity:0;
+ transition:all 0.35s ease;
+ z-index:9999;
+ width:90%;
+ max-width:320px;
+ text-align:center;
 }
 
 #pedido-flotante.activo{
- transform:translate(-50%,-50%) scale(1);
+ transform:translateX(-50%) translateY(0);
+ opacity:1;
+}
+
+#pedido-flotante h3{
+ margin-top:0;
+}
+
+.acciones-pedido{
+ display:flex;
+ justify-content:space-between;
+ gap:10px;
+ margin-top:10px;
+}
+
+.acciones-pedido button{
+ flex:1;
+ padding:8px;
+ border:none;
+ border-radius:8px;
+ font-weight:bold;
+ cursor:pointer;
+}
+
+#btn-borrar{
+ background:#e53935;
+ color:white;
+}
+
+#enviar-whatsapp{
+ background:#2e7d32;
+ color:white;
 }
 </style>
 </head>
