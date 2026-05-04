@@ -19,7 +19,7 @@ header h1 { color:#c24a00; }
   flex-wrap:wrap;
   justify-content:center;
   padding:20px;
-  padding-bottom:160px;
+  padding-bottom:120px;
 }
 
 .product {
@@ -78,9 +78,20 @@ header h1 { color:#c24a00; }
 #btnHamburguesas { background:#28a745; }
 #btnLomitos { background:#ff5722; }
 #btnBebidas { background:#00bcd4; }
-#btnCarrito { background:#007bff; }
 
-/* PANEL PEDIDO */
+/* 🔥 BOTÓN VERDE PEDIDO */
+#btnCarrito {
+  position: fixed;
+  right: 15px;
+  bottom: 80px;
+  background:#28a745;
+  display:none;
+  width:auto;
+  padding:12px 18px;
+  border-radius:50px;
+}
+
+/* PANEL DETALLE (opcional) */
 #pedido-flotante {
   display:none;
   position:fixed;
@@ -109,13 +120,15 @@ header h1 { color:#c24a00; }
 <div id="modal" class="modal">
   <div class="modal-content">
     <h2 id="titulo"></h2>
-    <button id="entera">Entera</button>
-    <button id="mitad">Mitad</button>
+    <br>
+    <button id="entera">🍕 Entera</button>
+    <button id="mitad">1/2 Mitad</button>
+    <br><br>
     <button id="cancelar">Cancelar</button>
   </div>
 </div>
 
-<!-- PANEL PEDIDO -->
+<!-- DETALLE PEDIDO -->
 
 <div id="pedido-flotante">
   <h3>Mi Pedido</h3>
@@ -131,8 +144,9 @@ header h1 { color:#c24a00; }
   <button id="btnHamburguesas" class="btn-flotante">HAMBURGUESAS</button>
   <button id="btnLomitos" class="btn-flotante">LOMITOS</button>
   <button id="btnBebidas" class="btn-flotante">BEBIDAS</button>
-  <button id="btnCarrito" class="btn-flotante">MI PEDIDO</button>
 </div>
+
+<button id="btnCarrito">Gs. 0</button>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
@@ -158,121 +172,107 @@ let productoActual = null;
 let mitadPendiente = null;
 
 const modal = document.getElementById("modal");
-const titulo = document.getElementById("titulo");
 
 // CLICK PRODUCTO
 function abrirProducto(nombre, precio){
   productoActual = {nombre, precio};
-  titulo.innerText = nombre;
+  document.getElementById("titulo").innerText = nombre;
   modal.style.display = "flex";
 }
 
 // MODAL
-document.getElementById("cancelar").onclick = () => modal.style.display = "none";
+cancelar.onclick = ()=> modal.style.display="none";
 
-document.getElementById("entera").onclick = () => {
-  push(pedidoRef,{
-    nombre: productoActual.nombre,
-    precio: productoActual.precio
-  });
-  modal.style.display = "none";
+entera.onclick = ()=>{
+  push(pedidoRef, productoActual);
+  modal.style.display="none";
 };
 
-document.getElementById("mitad").onclick = () => {
+mitad.onclick = ()=>{
   if(!mitadPendiente){
     mitadPendiente = productoActual;
-    modal.style.display = "none";
+    modal.style.display="none";
     alert("Elegí la otra mitad");
-  } else {
-    const precio = Math.max(mitadPendiente.precio, productoActual.precio);
-
+  }else{
     push(pedidoRef,{
-      nombre:`Mitad ${mitadPendiente.nombre} + ${productoActual.nombre}`,
-      precio:precio
+      nombre:`1/2 ${mitadPendiente.nombre} + 1/2 ${productoActual.nombre}`,
+      precio: Math.max(mitadPendiente.precio, productoActual.precio)
     });
-
-    mitadPendiente = null;
-    modal.style.display = "none";
+    mitadPendiente=null;
+    modal.style.display="none";
   }
 };
 
-// 🔥 RENDER PEDIDO + BOTÓN VERDE
+// 🔥 RENDER PEDIDO
 onValue(pedidoRef, snap=>{
   const data = snap.val();
-  const lista = document.getElementById("lista-pedido");
-  const panel = document.getElementById("pedido-flotante");
   const btn = document.getElementById("btnCarrito");
+  const lista = document.getElementById("lista-pedido");
 
-  lista.innerHTML = "";
-  let total = 0;
+  lista.innerHTML="";
+  let total=0;
 
   if(data){
     Object.values(data).forEach(p=>{
-      const li = document.createElement("li");
-      li.textContent = p.nombre + " - Gs. " + p.precio.toLocaleString();
+      total+=p.precio;
+      const li=document.createElement("li");
+      li.textContent=p.nombre+" - Gs. "+p.precio;
       lista.appendChild(li);
-      total += p.precio;
     });
 
-    panel.style.display = "block";
-    btn.innerText = "Gs. " + total.toLocaleString();
-    btn.style.background = "#28a745";
+    btn.style.display="block";
+    btn.innerText="🛒 Gs. "+total.toLocaleString();
 
-  } else {
-    panel.style.display = "none";
-    btn.innerText = "MI PEDIDO";
-    btn.style.background = "#007bff";
+  }else{
+    btn.style.display="none";
   }
 
-  document.getElementById("total-pedido").innerText =
-    "Total: Gs. " + total.toLocaleString();
+  document.getElementById("total-pedido").innerText="Total: Gs. "+total;
 });
+
+// BOTÓN PEDIDO
+btnCarrito.onclick=()=>{
+  const panel=document.getElementById("pedido-flotante");
+  panel.style.display=panel.style.display==="block"?"none":"block";
+};
+
+// BORRAR / ENVIAR
+btn-borrar.onclick=()=>remove(pedidoRef);
+
+btn-enviar.onclick=()=>{
+  let mensaje="Hola, quiero pedir:\n";
+  let total=0;
+
+  onValue(pedidoRef,(snap)=>{
+    const data=snap.val();
+    if(!data) return;
+
+    Object.values(data).forEach(p=>{
+      mensaje+=`${p.nombre} - Gs. ${p.precio}\n`;
+      total+=p.precio;
+    });
+
+    mensaje+=`\nTotal: Gs. ${total}`;
+    window.open("https://wa.me/?text="+encodeURIComponent(mensaje));
+  },{onlyOnce:true});
+};
 
 // BOTONES
 btnHamburguesas.onclick=()=>location.href="https://alo-rico.github.io/hamburguesa/";
 btnLomitos.onclick=()=>location.href="https://alo-rico.github.io/lomitos/";
 btnBebidas.onclick=()=>location.href="https://alo-rico.github.io/bebidas/";
 
-btnCarrito.onclick=()=>{
-  const panel = document.getElementById("pedido-flotante");
-  panel.style.display = panel.style.display === "block" ? "none" : "block";
-};
-
-// BORRAR / ENVIAR
-document.getElementById("btn-borrar").onclick = ()=> remove(pedidoRef);
-
-document.getElementById("btn-enviar").onclick = ()=>{
-  let mensaje = "Hola, quiero pedir:\n";
-  let total = 0;
-
-  onValue(pedidoRef,(snap)=>{
-    const data = snap.val();
-    if(!data) return;
-
-    Object.values(data).forEach(p=>{
-      mensaje += `${p.nombre} - Gs. ${p.precio}\n`;
-      total += p.precio;
-    });
-
-    mensaje += `\nTotal: Gs. ${total}`;
-    window.open("https://wa.me/?text="+encodeURIComponent(mensaje));
-  },{onlyOnce:true});
-};
-
-// CARGAR MENU (SIN TOCAR RUTA)
+// CARGAR MENU
 const res = await fetch("https://alo-rico.github.io/pizza/precios.json");
 const data = await res.json();
 
-const menu = document.getElementById("menu");
+const menu=document.getElementById("menu");
 
 Object.entries(data).forEach(([n,i])=>{
   const card=document.createElement("div");
   card.className="product";
-
   card.innerHTML=`<img src="${i.imagen}"><h3>${n}</h3><p>Gs. ${i.precio}</p>`;
-
   card.onclick=()=>abrirProducto(n,i.precio);
-
   menu.appendChild(card);
 });
 </script>
