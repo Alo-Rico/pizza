@@ -46,7 +46,7 @@ button:active{
 }
 
 #btnHamburguesas{background:#28a745;}
-#btnBebidas{background:#007bff;}
+#btnBebidas{background:#007bff;}10x15
 #btnLomitos{background:#ffc107;color:#000;}
 #btnCarrito{background:#ff5722;}
 
@@ -156,10 +156,25 @@ button:active{
 <!-- BOTONES -->
 <div class="btn-grid">
 <div id="mensaje-total">💰 Total: Gs. 0</div>
-<button id="btnHamburguesas" class="btn-flotante">HAMBURGUESAS</button>
-<button id="btnBebidas" class="btn-flotante">BEBIDAS</button>
-<button id="btnLomitos" class="btn-flotante">LOMITOS</button>
-<button id="btnCarrito" class="btn-flotante">MI PEDIDO</button>
+const btnHamburguesas = document.getElementById("btnHamburguesas");
+const btnBebidas = document.getElementById("btnBebidas");
+const btnLomitos = document.getElementById("btnLomitos");
+const btnCarrito = document.getElementById("btnCarrito");
+
+// 🔥 ESTE BLOQUE FALTABA
+btnHamburguesas.onclick = () => location.href = "https://alo-rico.github.io/hamburguesa/";
+btnBebidas.onclick = () => location.href = "https://alo-rico.github.io/bebidas/";
+btnLomitos.onclick = () => location.href = "https://alo-rico.github.io/lomitos/";
+
+// ESTE YA ESTABA
+btnCarrito.onclick = () => {
+ const p = document.getElementById("pedido-flotante");
+ p.classList.toggle("activo");
+
+ if(p.classList.contains("activo")){
+  setTimeout(()=>{ p.classList.remove("activo"); },7000);
+ }
+};
 </div>
 
 <div id="pedido-flotante">
