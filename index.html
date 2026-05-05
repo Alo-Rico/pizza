@@ -197,9 +197,10 @@ if (!clienteId) {
 const pedidoRef = ref(db, "pedidos/" + clienteId);
 
 // BOTONES + ⏱ AUTO CIERRE
-btnHamburguesas.onclick=()=>location.href="https://alo-rico.github.io/hamburguesa/";
-btnLomitos.onclick=()=>location.href="https://alo-rico.github.io/lomitos/";
-btnBebidas.onclick=()=>location.href="https://alo-rico.github.io/bebidas/";
+const btnHamburguesas = document.getElementById("btnHamburguesas");
+const btnBebidas = document.getElementById("btnBebidas");
+const btnLomitos = document.getElementById("btnLomitos");
+const btnCarrito = document.getElementById("btnCarrito");
 
 btnCarrito.onclick=()=>{
  const p = document.getElementById("pedido-flotante");
