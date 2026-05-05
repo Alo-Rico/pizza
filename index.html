@@ -74,11 +74,17 @@ button:active{
  width:90%;
  max-width:320px;
  text-align:center;
+
+ /* 🔥 FIX MOBILE */
+ pointer-events: none;
 }
 
 #pedido-flotante.activo{
  transform:translateX(-50%) translateY(0);
  opacity:1;
+
+ /* 🔥 FIX MOBILE */
+ pointer-events: auto;
 }
 
 #pedido-flotante h3{
