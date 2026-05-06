@@ -81,7 +81,7 @@ header img.icono{
  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
  gap:22px;
  padding:25px;
- padding-bottom:220px;
+ padding-bottom:320px;
  max-width:1400px;
  margin:auto;
 }
@@ -119,7 +119,7 @@ header img.icono{
 }
 
 .product p{
- margin:14px 0 18px;
+ margin:14px 0 24px;
  font-size:22px;
  font-weight:700;
  color:#22c55e;
@@ -222,7 +222,7 @@ header img.icono{
  align-items:center;
  margin:10px 0;
  background:rgba(255,255,255,.05);
- padding:10px;
+ padding:12px;
  border-radius:12px;
 }
 
@@ -305,6 +305,7 @@ header img.icono{
   grid-template-columns:repeat(2,1fr);
   gap:16px;
   padding:16px;
+  padding-bottom:320px;
  }
 
  .product img{
@@ -379,15 +380,46 @@ Enviar pedido
 <br><br>
 
 <button
- onclick="confirmar()"
- style="background:#22c55e;color:white;padding:12px 18px;border:none;border-radius:12px;font-weight:bold;"
+ id="btn-entera"
+ style="
+ background:#22c55e;
+ color:white;
+ padding:12px 18px;
+ border:none;
+ border-radius:12px;
+ font-weight:bold;
+ margin:5px;
+ "
 >
-Agregar
+🍕 Entera
+</button>
+
+<button
+ id="btn-media"
+ style="
+ background:#f59e0b;
+ color:white;
+ padding:12px 18px;
+ border:none;
+ border-radius:12px;
+ font-weight:bold;
+ margin:5px;
+ "
+>
+🍕 Media
 </button>
 
 <button
  onclick="cerrar()"
- style="background:#ef4444;color:white;padding:12px 18px;border:none;border-radius:12px;font-weight:bold;"
+ style="
+ background:#ef4444;
+ color:white;
+ padding:12px 18px;
+ border:none;
+ border-radius:12px;
+ font-weight:bold;
+ margin:5px;
+ "
 >
 Cancelar
 </button>
@@ -571,18 +603,33 @@ window.cerrar = ()=>{
  .style.display = "none";
 };
 
-window.confirmar = ()=>{
+document.getElementById("btn-entera")
+.onclick = ()=>{
+
+ agregarPedido("Pizza Entera");
+};
+
+document.getElementById("btn-media")
+.onclick = ()=>{
+
+ agregarPedido("Media Pizza");
+};
+
+function agregarPedido(tipo){
 
  const cant =
- parseInt(document.getElementById("cantidad").value)||1;
+ parseInt(
+  document.getElementById("cantidad").value
+ ) || 1;
 
  push(pedidoRef,{
   ...seleccionado,
-  cantidad:cant
+  cantidad:cant,
+  tipo:tipo
  });
 
  cerrar();
-};
+}
 
 /* PEDIDOS */
 
@@ -609,9 +656,44 @@ onValue(pedidoRef,(snap)=>{
    li.className = "item-pedido";
 
    li.innerHTML = `
-    <span>${p.nombre} x${p.cantidad}</span>
 
-    <button class="btn-eliminar">🗑</button>
+   <div style="
+   display:flex;
+   flex-direction:column;
+   align-items:flex-start;
+   text-align:left;
+   ">
+
+   <span style="
+   font-weight:600;
+   font-size:15px;
+   ">
+   ${p.cantidad} x ${p.nombre}
+   </span>
+
+   <span style="
+   font-size:13px;
+   opacity:.9;
+   margin-top:4px;
+   color:#facc15;
+   ">
+   ${p.tipo || "Pizza"}
+   </span>
+
+   <span style="
+   font-size:14px;
+   color:#22c55e;
+   margin-top:3px;
+   font-weight:bold;
+   ">
+   Gs. ${(p.precio * p.cantidad).toLocaleString()}
+   </span>
+
+   </div>
+
+   <button class="btn-eliminar">
+   🗑
+   </button>
    `;
 
    li.querySelector("button").onclick = ()=>{
@@ -625,7 +707,7 @@ onValue(pedidoRef,(snap)=>{
 
  document.getElementById("total-pedido")
  .innerText =
- "Total: Gs. " + total.toLocaleString();
+ "TOTAL: Gs. " + total.toLocaleString();
 
  const mensaje =
  document.getElementById("mensaje-total");
@@ -671,13 +753,13 @@ document.getElementById("enviar-whatsapp").onclick = ()=>{
 
   Object.values(d).forEach(p=>{
 
-   txt += `- ${p.nombre} x${p.cantidad}%0A`;
+   txt += `- ${p.nombre} (${p.tipo || "Pizza"}) x${p.cantidad} - Gs. ${(p.precio * p.cantidad).toLocaleString()}%0A`;
 
    total += p.precio * p.cantidad;
   });
 
   const mensaje =
-  `Hola envio mi pedido - Mesa ${mesa}:%0A${txt}%0ATotal: Gs. ${total.toLocaleString()}`;
+  `Hola envio mi pedido - Mesa ${mesa}:%0A%0A${txt}%0ATOTAL: Gs. ${total.toLocaleString()}`;
 
   window.open(
    `https://wa.me/+595971891251?text=${mensaje}`
