@@ -379,48 +379,42 @@ Enviar pedido
 
 <br><br>
 
-<button
- id="btn-entera"
- style="
- background:#22c55e;
- color:white;
- padding:12px 18px;
- border:none;
- border-radius:12px;
- font-weight:bold;
- margin:5px;
- "
->
+<button id="btn-entera"
+style="
+background:#22c55e;
+color:white;
+padding:12px 18px;
+border:none;
+border-radius:12px;
+font-weight:bold;
+margin:5px;
+">
 🍕 Entera
 </button>
 
-<button
- id="btn-media"
- style="
- background:#f59e0b;
- color:white;
- padding:12px 18px;
- border:none;
- border-radius:12px;
- font-weight:bold;
- margin:5px;
- "
->
+<button id="btn-media"
+style="
+background:#f59e0b;
+color:white;
+padding:12px 18px;
+border:none;
+border-radius:12px;
+font-weight:bold;
+margin:5px;
+">
 🍕 Media
 </button>
 
-<button
- onclick="cerrar()"
- style="
- background:#ef4444;
- color:white;
- padding:12px 18px;
- border:none;
- border-radius:12px;
- font-weight:bold;
- margin:5px;
- "
->
+<button onclick="cerrar()"
+style="
+background:#ef4444;
+color:white;
+padding:12px 18px;
+border:none;
+border-radius:12px;
+font-weight:bold;
+margin:5px;
+">
 Cancelar
 </button>
 
@@ -468,15 +462,11 @@ import {
  remove
 } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";
 
-/* MESA */
-
 const params =
 new URLSearchParams(window.location.search);
 
 const mesa =
 params.get("mesa") || "general";
-
-/* FIREBASE */
 
 const firebaseConfig = {
 
@@ -493,21 +483,15 @@ const app = initializeApp(firebaseConfig);
 
 const db = getDatabase(app);
 
-/* CLIENTE */
-
 const clienteId =
 "mesa_" + mesa;
 
 const pedidoRef =
 ref(db,"pedidos/" + clienteId);
 
-/* TITULO */
-
 document.getElementById("titulo-pedido")
 .innerText =
 `Mi Pedido - Mesa ${mesa}`;
-
-/* BOTONES */
 
 document.getElementById("btnHamburguesas").onclick = ()=>{
 
@@ -529,13 +513,9 @@ document.getElementById("btnLomitos").onclick = ()=>{
 
 document.getElementById("btnCarrito").onclick = ()=>{
 
- const p =
- document.getElementById("pedido-flotante");
-
- p.classList.toggle("activo");
+ document.getElementById("pedido-flotante")
+ .classList.toggle("activo");
 };
-
-/* MENU FIREBASE */
 
 const menuRef =
 ref(db,"productos");
@@ -579,6 +559,7 @@ onValue(menuRef,(snap)=>{
 /* POPUP */
 
 let seleccionado = {};
+let mediaPizza = null;
 
 window.abrir = (n,p)=>{
 
@@ -603,19 +584,10 @@ window.cerrar = ()=>{
  .style.display = "none";
 };
 
+/* ENTERA */
+
 document.getElementById("btn-entera")
 .onclick = ()=>{
-
- agregarPedido("Pizza Entera");
-};
-
-document.getElementById("btn-media")
-.onclick = ()=>{
-
- agregarPedido("Media Pizza");
-};
-
-function agregarPedido(tipo){
 
  const cant =
  parseInt(
@@ -623,13 +595,60 @@ function agregarPedido(tipo){
  ) || 1;
 
  push(pedidoRef,{
-  ...seleccionado,
+  nombre:seleccionado.nombre,
+  precio:seleccionado.precio,
   cantidad:cant,
-  tipo:tipo
+  tipo:"Pizza Entera"
  });
 
  cerrar();
-}
+};
+
+/* MEDIA */
+
+document.getElementById("btn-media")
+.onclick = ()=>{
+
+ const cant =
+ parseInt(
+  document.getElementById("cantidad").value
+ ) || 1;
+
+ if(!mediaPizza){
+
+  mediaPizza = {
+   nombre:seleccionado.nombre,
+   precio:seleccionado.precio,
+   cantidad:cant
+  };
+
+  cerrar();
+
+  alert("Ahora elige la otra mitad 🍕");
+
+ }else{
+
+  const nombreFinal =
+  mediaPizza.nombre + " / " + seleccionado.nombre;
+
+  const precioFinal =
+  Math.max(
+   mediaPizza.precio,
+   seleccionado.precio
+  );
+
+  push(pedidoRef,{
+   nombre:nombreFinal,
+   precio:precioFinal,
+   cantidad:mediaPizza.cantidad,
+   tipo:"Media y Media"
+  });
+
+  mediaPizza = null;
+
+  cerrar();
+ }
+};
 
 /* PEDIDOS */
 
@@ -673,9 +692,8 @@ onValue(pedidoRef,(snap)=>{
 
    <span style="
    font-size:13px;
-   opacity:.9;
-   margin-top:4px;
    color:#facc15;
+   margin-top:4px;
    ">
    ${p.tipo || "Pizza"}
    </span>
