@@ -26,8 +26,6 @@ body{
  overflow-x:hidden;
 }
 
-/* FONDO */
-
 body::before{
  content:"";
  position:fixed;
@@ -47,8 +45,6 @@ body::after{
  backdrop-filter:blur(6px);
  z-index:-1;
 }
-
-/* HEADER */
 
 header{
  padding:30px 20px 10px;
@@ -74,8 +70,6 @@ header img.icono{
  margin-top:10px;
 }
 
-/* MENU */
-
 .menu-container{
  display:grid;
  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
@@ -86,8 +80,6 @@ header img.icono{
  margin:auto;
 }
 
-/* PRODUCTOS */
-
 .product{
  background:rgba(255,255,255,.08);
  border:1px solid rgba(255,255,255,.08);
@@ -97,12 +89,10 @@ header img.icono{
  transition:.25s;
  backdrop-filter:blur(10px);
  box-shadow:0 10px 30px rgba(0,0,0,.30);
- position:relative;
 }
 
 .product:hover{
  transform:translateY(-6px) scale(1.02);
- box-shadow:0 20px 45px rgba(0,0,0,.45);
 }
 
 .product img{
@@ -125,8 +115,6 @@ header img.icono{
  color:#22c55e;
 }
 
-/* BOTONES */
-
 .btn-grid{
  position:fixed;
  right:15px;
@@ -146,7 +134,6 @@ header img.icono{
  cursor:pointer;
  font-size:15px;
  color:white;
- box-shadow:0 10px 25px rgba(0,0,0,.35);
 }
 
 #btnHamburguesas{
@@ -166,8 +153,6 @@ header img.icono{
  background:#ef4444;
 }
 
-/* TOTAL */
-
 #mensaje-total{
  display:none;
  background:#22c55e;
@@ -175,7 +160,6 @@ header img.icono{
  padding:14px 18px;
  border-radius:16px;
  font-weight:700;
- box-shadow:0 10px 30px rgba(0,0,0,.35);
  position:fixed;
  bottom:145px;
  left:50%;
@@ -183,8 +167,6 @@ header img.icono{
  z-index:9999;
  min-width:260px;
 }
-
-/* PEDIDO */
 
 #pedido-flotante{
  position:fixed;
@@ -195,7 +177,6 @@ header img.icono{
  border:1px solid rgba(255,255,255,.08);
  padding:22px;
  border-radius:24px;
- box-shadow:0 20px 45px rgba(0,0,0,.45);
  opacity:0;
  transition:all .35s ease;
  z-index:9999;
@@ -236,8 +217,6 @@ header img.icono{
  cursor:pointer;
 }
 
-/* ACCIONES */
-
 .acciones-pedido{
  display:flex;
  gap:10px;
@@ -262,8 +241,6 @@ header img.icono{
  background:#16a34a;
  color:white;
 }
-
-/* POPUP */
 
 #popup-cantidad{
  display:none;
@@ -296,8 +273,6 @@ header img.icono{
  background:#1f2937;
  color:white;
 }
-
-/* RESPONSIVE */
 
 @media(max-width:700px){
 
@@ -341,8 +316,6 @@ header img.icono{
 
 <div id="menu" class="menu-container"></div>
 
-<!-- PEDIDO -->
-
 <div id="pedido-flotante">
 
 <h3 id="titulo-pedido">
@@ -366,8 +339,6 @@ Enviar pedido
 </div>
 
 </div>
-
-<!-- POPUP -->
 
 <div id="popup-cantidad">
 
@@ -422,13 +393,9 @@ Cancelar
 
 </div>
 
-<!-- TOTAL -->
-
 <div id="mensaje-total">
 💰 Total: Gs. 0
 </div>
-
-<!-- BOTONES -->
 
 <div class="btn-grid">
 
@@ -556,8 +523,6 @@ onValue(menuRef,(snap)=>{
  }
 });
 
-/* POPUP */
-
 let seleccionado = {};
 let mediaPizza = null;
 
@@ -650,8 +615,6 @@ document.getElementById("btn-media")
  }
 };
 
-/* PEDIDOS */
-
 onValue(pedidoRef,(snap)=>{
 
  const data = snap.val();
@@ -743,14 +706,10 @@ onValue(pedidoRef,(snap)=>{
  }
 });
 
-/* BORRAR */
-
 document.getElementById("btn-borrar").onclick = ()=>{
 
  remove(pedidoRef);
 };
-
-/* WHATSAPP */
 
 document.getElementById("enviar-whatsapp").onclick = ()=>{
 
