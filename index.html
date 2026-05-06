@@ -1,94 +1,172 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+
 <meta charset="utf-8"/>
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
 <title>Menú Alo Rico - Pizzas</title>
 
 <style>
-body { font-family: Arial, sans-serif; background-color: #fefaf0; text-align: center; margin: 0; padding: 0; }
-header { margin-top: 20px; }
-header img.logo { width: 120px; }
-header h1 { font-size: 28px; color: #c24a00; }
-header img.icono { width: 60px; }
 
-.menu-container { display: flex; flex-wrap: wrap; justify-content: center; padding: 20px; padding-bottom: 180px; }
+body{
+ font-family:Arial,sans-serif;
+ background-color:#fefaf0;
+ text-align:center;
+ margin:0;
+ padding:0;
+}
 
-.product { width: 180px; background: white; margin: 15px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer; }
-.product img { width: 100%; height: 140px; object-fit: cover; }
+header{
+ margin-top:20px;
+}
 
-/* 🔥 BOTONES 3D */
+header img.logo{
+ width:120px;
+}
+
+header h1{
+ font-size:28px;
+ color:#c24a00;
+}
+
+header img.icono{
+ width:60px;
+}
+
+.menu-container{
+ display:flex;
+ flex-wrap:wrap;
+ justify-content:center;
+ padding:20px;
+ padding-bottom:180px;
+}
+
+.product{
+ width:180px;
+ background:white;
+ margin:15px;
+ border-radius:14px;
+ overflow:hidden;
+ box-shadow:0 4px 10px rgba(0,0,0,0.12);
+ cursor:pointer;
+ transition:.2s;
+}
+
+.product:hover{
+ transform:scale(1.03);
+}
+
+.product img{
+ width:100%;
+ height:140px;
+ object-fit:cover;
+}
+
+/* BOTONES */
+
 button{
- transition: all 0.15s ease;
- box-shadow: 0 4px 0 rgba(0,0,0,0.2);
+ transition:all .15s ease;
+ box-shadow:0 4px 0 rgba(0,0,0,.2);
 }
+
 button:active{
- transform: translateY(3px);
- box-shadow: 0 1px 0 rgba(0,0,0,0.2);
+ transform:translateY(3px);
+ box-shadow:0 1px 0 rgba(0,0,0,.2);
 }
 
-.btn-grid {
- position: fixed;
- right: 15px;
- bottom: 15px;
- display: grid;
- grid-template-columns: 1fr 1fr;
- gap: 10px;
+.btn-grid{
+ position:fixed;
+ right:15px;
+ bottom:15px;
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:10px;
+ z-index:10000;
 }
 
-.btn-flotante {
- color: #fff;
- border: none;
- padding: 12px;
- border-radius: 50px;
- font-weight: bold;
- cursor: pointer;
+.btn-flotante{
+ width:150px;
+ height:52px;
+ color:#fff;
+ border:none;
+ border-radius:14px;
+ font-weight:bold;
+ cursor:pointer;
+ font-size:15px;
 }
 
-#btnHamburguesas{background:#28a745;}
-#btnBebidas{background:#007bff;}
-#btnLomitos{background:#ffc107;color:#000;}
-#btnCarrito{background:#ff5722;}
+#btnHamburguesas{
+ background:#28a745;
+}
+
+#btnBebidas{
+ background:#2196f3;
+}
+
+#btnLomitos{
+ background:#ff9800;
+ color:black;
+}
+
+#btnCarrito{
+ background:#ff5722;
+}
+
+/* TOTAL */
 
 #mensaje-total{
  display:none;
  background:#28a745;
  color:#fff;
- padding:8px;
- border-radius:10px;
- grid-column:span 2;
+ padding:10px 16px;
+ border-radius:12px;
+ font-weight:bold;
+ box-shadow:0 4px 10px rgba(0,0,0,0.25);
+ text-align:center;
+ position:fixed;
+ bottom:135px;
+ left:50%;
+ transform:translateX(-50%);
+ z-index:9999;
+ min-width:240px;
 }
+
+/* PEDIDO */
 
 #pedido-flotante{
  position:fixed;
- bottom:20px;
+ bottom:185px;
  left:50%;
  transform:translateX(-50%) translateY(120px);
  background:#fff;
  padding:18px;
- border-radius:15px;
- box-shadow:0 12px 35px rgba(0,0,0,0.25);
+ border-radius:18px;
+ box-shadow:0 12px 35px rgba(0,0,0,.25);
  opacity:0;
- transition:all 0.35s ease;
- z-index:1;
+ transition:all .35s ease;
+ z-index:9999;
  width:90%;
- max-width:320px;
+ max-width:340px;
  text-align:center;
-
- /* 🔥 FIX MOBILE */
- pointer-events: none;
+ pointer-events:none;
 }
 
 #pedido-flotante.activo{
  transform:translateX(-50%) translateY(0);
  opacity:1;
-
- /* 🔥 FIX MOBILE */
- pointer-events: auto;
+ pointer-events:auto;
 }
 
 #pedido-flotante h3{
  margin-top:0;
+}
+
+#pedido-flotante ul{
+ list-style:none;
+ padding:0;
+ margin:0;
 }
 
 .acciones-pedido{
@@ -100,7 +178,7 @@ button:active{
 
 .acciones-pedido button{
  flex:1;
- padding:8px;
+ padding:10px;
  border:none;
  border-radius:8px;
  font-weight:bold;
@@ -117,7 +195,8 @@ button:active{
  color:white;
 }
 
-/* 🗑 items con botón eliminar */
+/* ITEMS */
+
 .item-pedido{
  display:flex;
  justify-content:space-between;
@@ -134,213 +213,498 @@ button:active{
  height:26px;
  cursor:pointer;
 }
+
+/* MODAL */
+
+#modal{
+ display:none;
+ position:fixed;
+ top:0;
+ left:0;
+ width:100%;
+ height:100%;
+ background:#0008;
+ justify-content:center;
+ align-items:center;
+ z-index:99999;
+}
+
+.modal-content{
+ background:white;
+ padding:24px;
+ border-radius:16px;
+ width:300px;
+ text-align:center;
+ box-shadow:0 10px 30px rgba(0,0,0,.3);
+}
+
+.modal-content input{
+ width:80px;
+ font-size:20px;
+ text-align:center;
+ padding:8px;
+ margin-top:10px;
+}
+
+.modal-content button{
+ padding:10px 18px;
+ margin:10px 5px 0;
+ border:none;
+ border-radius:8px;
+ font-weight:bold;
+ cursor:pointer;
+}
+
 </style>
+
 </head>
 
 <body>
 
 <header>
+
 <img src="logo.png" class="logo">
+
 <h1>Menú de Pizzas</h1>
+
 <img src="Repartidor.png" class="icono">
+
 </header>
 
 <div id="menu" class="menu-container"></div>
 
 <!-- MODAL -->
-<div id="modal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:#0008;justify-content:center;align-items:center;">
- <div style="background:white;padding:20px;border-radius:10px;">
+
+<div id="modal">
+
+ <div class="modal-content">
+
   <h3 id="modal-titulo"></h3>
-  <input type="number" id="cantidad-input" value="1">
+
+  <input type="number" id="cantidad-input" value="1" min="1">
+
   <br><br>
-  <button id="btn-entera">Entera</button>
-  <button id="btn-mitad">Mitad</button>
-  <button id="btn-cancelar">Cancelar</button>
+
+  <button id="btn-entera" style="background:#28a745;color:white;">
+   Entera
+  </button>
+
+  <button id="btn-mitad" style="background:#ff9800;color:white;">
+   Mitad
+  </button>
+
+  <button id="btn-cancelar" style="background:#f44336;color:white;">
+   Cancelar
+  </button>
+
  </div>
+
+</div>
+
+<!-- TOTAL -->
+
+<div id="mensaje-total">
+💰 Total: Gs. 0
 </div>
 
 <!-- BOTONES -->
+
 <div class="btn-grid">
-<div id="mensaje-total">💰 Total: Gs. 0</div>
-<button id="btnHamburguesas" class="btn-flotante">HAMBURGUESAS</button>
-<button id="btnBebidas" class="btn-flotante">BEBIDAS</button>
-<button id="btnLomitos" class="btn-flotante">LOMITOS</button>
-<button id="btnCarrito" class="btn-flotante">MI PEDIDO</button>
+
+<button id="btnHamburguesas" class="btn-flotante">
+HAMBURGUESAS
+</button>
+
+<button id="btnBebidas" class="btn-flotante">
+BEBIDAS
+</button>
+
+<button id="btnLomitos" class="btn-flotante">
+LOMITOS
+</button>
+
+<button id="btnCarrito" class="btn-flotante">
+MI PEDIDO
+</button>
+
 </div>
 
+<!-- PEDIDO -->
+
 <div id="pedido-flotante">
-  <h3>Mi Pedido</h3>
+
+  <h3 id="titulo-pedido">
+   Mi Pedido
+  </h3>
+
   <ul id="lista-pedido"></ul>
+
   <p id="total-pedido"></p>
 
   <div class="acciones-pedido">
-    <button id="btn-borrar">Borrar</button>
-    <button id="enviar-whatsapp">Enviar pedido</button>
+
+    <button id="btn-borrar">
+      Borrar
+    </button>
+
+    <button id="enviar-whatsapp">
+      Enviar pedido
+    </button>
+
   </div>
+
 </div>
 
-<!-- 🔥 FIREBASE -->
+<!-- FIREBASE -->
+
 <script type="module">
+
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
-import { getDatabase, ref, push, onValue, remove } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";
+
+import {
+ getDatabase,
+ ref,
+ push,
+ onValue,
+ remove
+} from "https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";
+
+/* MESA */
+
+const params =
+new URLSearchParams(window.location.search);
+
+const mesa =
+params.get("mesa") || "general";
+
+/* FIREBASE */
 
 const firebaseConfig = {
+
  apiKey: "AIzaSyADGYsqhbCFuKj2fXpontLpND_rtT7Nlno",
+
  authDomain: "alorico-59754.firebaseapp.com",
+
  databaseURL: "https://alorico-59754-default-rtdb.firebaseio.com",
+
  projectId: "alorico-59754"
 };
 
 const app = initializeApp(firebaseConfig);
+
 const db = getDatabase(app);
 
-let clienteId = localStorage.getItem("clienteId");
-if (!clienteId) {
- clienteId = "cliente_" + Date.now();
- localStorage.setItem("clienteId", clienteId);
-}
+/* CLIENTE */
 
-const pedidoRef = ref(db, "pedidos/" + clienteId);
+const clienteId =
+"mesa_" + mesa;
 
-// BOTONES
-const btnHamburguesas = document.getElementById("btnHamburguesas");
-const btnBebidas = document.getElementById("btnBebidas");
-const btnLomitos = document.getElementById("btnLomitos");
-const btnCarrito = document.getElementById("btnCarrito");
+const pedidoRef =
+ref(db,"pedidos/" + clienteId);
 
-// NAVEGACIÓN
-btnHamburguesas.onclick = () => location.href = "https://alo-rico.github.io/hamburguesa/";
-btnBebidas.onclick = () => location.href = "https://alo-rico.github.io/bebidas/";
-btnLomitos.onclick = () => location.href = "https://alo-rico.github.io/lomitos/";
+/* TITULO */
 
-// CARRITO
-btnCarrito.onclick = () => {
- const p = document.getElementById("pedido-flotante");
+document.getElementById("titulo-pedido")
+.innerText =
+`Mi Pedido - Mesa ${mesa}`;
+
+/* BOTONES */
+
+const btnHamburguesas =
+document.getElementById("btnHamburguesas");
+
+const btnBebidas =
+document.getElementById("btnBebidas");
+
+const btnLomitos =
+document.getElementById("btnLomitos");
+
+const btnCarrito =
+document.getElementById("btnCarrito");
+
+/* NAVEGACION */
+
+btnHamburguesas.onclick = ()=>{
+
+ location.href =
+ `https://alo-rico.github.io/hamburguesa/?mesa=${mesa}`;
+};
+
+btnBebidas.onclick = ()=>{
+
+ location.href =
+ `https://alo-rico.github.io/bebidas/?mesa=${mesa}`;
+};
+
+btnLomitos.onclick = ()=>{
+
+ location.href =
+ `https://alo-rico.github.io/lomitos/?mesa=${mesa}`;
+};
+
+/* CARRITO */
+
+btnCarrito.onclick = ()=>{
+
+ const p =
+ document.getElementById("pedido-flotante");
+
  p.classList.toggle("activo");
 
  if(p.classList.contains("activo")){
-  setTimeout(()=>{ p.classList.remove("activo"); },7000);
+
+  setTimeout(()=>{
+
+   p.classList.remove("activo");
+
+  },7000);
  }
 };
 
-// LISTEN + BORRAR INDIVIDUAL
+/* LISTEN PEDIDO */
+
 onValue(pedidoRef,(snap)=>{
+
  const data=snap.val();
+
  let total=0;
- const lista=document.getElementById("lista-pedido");
+
+ const lista=
+ document.getElementById("lista-pedido");
+
  lista.innerHTML="";
 
  if(data){
-  Object.entries(data).forEach(([key,p])=>{
-   total+=p.precio*p.cantidad;
 
-   const li=document.createElement("li");
+  Object.entries(data).forEach(([key,p])=>{
+
+   total += p.precio * p.cantidad;
+
+   const li =
+   document.createElement("li");
+
    li.className="item-pedido";
+
    li.innerHTML=`
      ${p.nombre} x${p.cantidad}
-     <button class="btn-eliminar">🗑</button>
+     <button class="btn-eliminar">
+      🗑
+     </button>
    `;
 
-   li.querySelector(".btn-eliminar").onclick=()=>{
-     remove(ref(db,"pedidos/"+clienteId+"/"+key));
+   li.querySelector(".btn-eliminar")
+   .onclick=()=>{
+
+     remove(
+      ref(db,"pedidos/"+clienteId+"/"+key)
+     );
    };
 
    lista.appendChild(li);
   });
  }
 
- document.getElementById("total-pedido").innerText="Gs. "+total;
- document.getElementById("mensaje-total").style.display=total?"block":"none";
- document.getElementById("mensaje-total").innerText="💰 Total: Gs. "+total;
+ document.getElementById("total-pedido")
+ .innerText =
+ "Gs. " + total.toLocaleString();
+
+ const mensaje =
+ document.getElementById("mensaje-total");
+
+ if(total > 0){
+
+  mensaje.style.display = "block";
+
+  mensaje.innerText =
+  `💰 Mesa ${mesa} - Total: Gs. ${total.toLocaleString()}`;
+
+ }else{
+
+  mensaje.style.display = "none";
+ }
 });
 
-// MODAL
+/* MODAL */
+
 let productoSeleccionado={};
+
 let mitadPendiente = null;
 
 window.abrirPopup=(n,p)=>{
- productoSeleccionado={nombre:n,precio:p};
- document.getElementById("modal").style.display="flex";
- document.getElementById("modal-titulo").innerText=n;
+
+ productoSeleccionado={
+  nombre:n,
+  precio:p
+ };
+
+ document.getElementById("modal")
+ .style.display="flex";
+
+ document.getElementById("modal-titulo")
+ .innerText=n;
 };
 
-// ENTERA
-document.getElementById("btn-entera").onclick = () => {
- const cant = parseInt(document.getElementById("cantidad-input").value)||1;
+/* ENTERA */
+
+document.getElementById("btn-entera")
+.onclick = ()=>{
+
+ const cant =
+ parseInt(
+  document.getElementById("cantidad-input").value
+ ) || 1;
 
  push(pedidoRef,{
+
   nombre: productoSeleccionado.nombre,
+
   precio: productoSeleccionado.precio,
+
   cantidad: cant
  });
 
- document.getElementById("modal").style.display="none";
+ document.getElementById("modal")
+ .style.display="none";
 };
 
-// MITAD
-document.getElementById("btn-mitad").onclick = () => {
+/* MITAD */
 
- const nombre = productoSeleccionado.nombre;
- const precio = productoSeleccionado.precio;
+document.getElementById("btn-mitad")
+.onclick = ()=>{
+
+ const nombre =
+ productoSeleccionado.nombre;
+
+ const precio =
+ productoSeleccionado.precio;
 
  if(!mitadPendiente){
-  mitadPendiente = {nombre, precio};
-  document.getElementById("modal").style.display="none";
+
+  mitadPendiente = {
+   nombre,
+   precio
+  };
+
+  document.getElementById("modal")
+  .style.display="none";
+
   alert("Elegí la otra mitad");
+
  }else{
 
-  const nombre1 = mitadPendiente.nombre;
-  const nombre2 = nombre;
+  const nombre1 =
+  mitadPendiente.nombre;
+
+  const nombre2 =
+  nombre;
 
   push(pedidoRef,{
-   nombre:`½ ${nombre1} + ½ ${nombre2}`,
-   precio: Math.max(mitadPendiente.precio, precio),
+
+   nombre:
+   `½ ${nombre1} + ½ ${nombre2}`,
+
+   precio:
+   Math.max(
+    mitadPendiente.precio,
+    precio
+   ),
+
    cantidad:1
   });
 
   mitadPendiente = null;
-  document.getElementById("modal").style.display="none";
+
+  document.getElementById("modal")
+  .style.display="none";
  }
 };
 
-// CANCELAR
-document.getElementById("btn-cancelar").onclick=()=>{
- document.getElementById("modal").style.display="none";
+/* CANCELAR */
+
+document.getElementById("btn-cancelar")
+.onclick=()=>{
+
+ document.getElementById("modal")
+ .style.display="none";
 };
 
-// BORRAR TODO
-document.getElementById("btn-borrar").onclick=()=>remove(pedidoRef);
+/* BORRAR */
 
-// WHATSAPP
-document.getElementById("enviar-whatsapp").onclick=()=>{
+document.getElementById("btn-borrar")
+.onclick=()=>{
+
+ remove(pedidoRef);
+};
+
+/* WHATSAPP */
+
+document.getElementById("enviar-whatsapp")
+.onclick=()=>{
+
  onValue(pedidoRef,(snap)=>{
+
   const data=snap.val();
-  if(!data)return alert("Sin pedido");
+
+  if(!data){
+
+   alert("Sin pedido");
+
+   return;
+  }
 
   let txt="";
+
   let total=0;
 
   Object.values(data).forEach(p=>{
-   txt+=`- ${p.nombre} x${p.cantidad}\n`;
-   total+=p.precio*p.cantidad;
+
+   txt +=
+   `- ${p.nombre} x${p.cantidad}%0A`;
+
+   total +=
+   p.precio * p.cantidad;
   });
 
-  const msg=`Hola envio mi pedido:%0A${txt}%0ATotal: Gs. ${total}`;
-  window.open(`https://wa.me/+595971891251?text=${msg}`);
+  const msg =
+  `Hola envio mi pedido - Mesa ${mesa}:%0A${txt}%0ATotal: Gs. ${total.toLocaleString()}`;
+
+  window.open(
+   `https://wa.me/+595971891251?text=${msg}`
+  );
+
  },{onlyOnce:true});
 };
 
-// MENU
-const res=await fetch("precios.json");
-const productos=await res.json();
+/* MENU */
+
+const res =
+await fetch("precios.json");
+
+const productos =
+await res.json();
 
 Object.entries(productos).forEach(([n,i])=>{
- const div=document.createElement("div");
+
+ const div =
+ document.createElement("div");
+
  div.className="product";
- div.innerHTML=`<img src="${i.imagen}?v=${Date.now()}"><h3>${n}</h3><p>Gs. ${i.precio}</p>`;
- div.onclick=()=>abrirPopup(n,i.precio);
- document.getElementById("menu").appendChild(div);
+
+ div.innerHTML=`
+  <img src="${i.imagen}?v=${Date.now()}">
+  <h3>${n}</h3>
+  <p>Gs. ${i.precio}</p>
+ `;
+
+ div.onclick=()=>{
+
+  abrirPopup(n,i.precio);
+ };
+
+ document.getElementById("menu")
+ .appendChild(div);
 });
+
 </script>
 
 </body>
