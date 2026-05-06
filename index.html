@@ -3,77 +3,133 @@
 <head>
 
 <meta charset="utf-8"/>
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
 <title>Menú Alo Rico - Pizzas</title>
 
 <style>
 
-body{
- font-family:Arial,sans-serif;
- background-color:#fefaf0;
- text-align:center;
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+*{
  margin:0;
  padding:0;
+ box-sizing:border-box;
 }
 
+body{
+ font-family:'Poppins',sans-serif;
+ background:#111827;
+ color:white;
+ text-align:center;
+ min-height:100vh;
+ overflow-x:hidden;
+}
+
+/* FONDO */
+
+body::before{
+ content:"";
+ position:fixed;
+ inset:0;
+ background:
+ linear-gradient(rgba(0,0,0,.82),rgba(0,0,0,.90)),
+ url('https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=1600&auto=format&fit=crop');
+ background-size:cover;
+ background-position:center;
+ z-index:-2;
+}
+
+body::after{
+ content:"";
+ position:fixed;
+ inset:0;
+ backdrop-filter:blur(6px);
+ z-index:-1;
+}
+
+/* HEADER */
+
 header{
- margin-top:20px;
+ padding:30px 20px 10px;
 }
 
 header img.logo{
  width:120px;
+ border-radius:50%;
+ border:4px solid #facc15;
+ background:white;
+ box-shadow:0 0 35px rgba(250,204,21,.35);
 }
 
 header h1{
- font-size:28px;
- color:#c24a00;
+ font-size:38px;
+ margin-top:18px;
+ color:#facc15;
+ font-weight:700;
 }
 
 header img.icono{
- width:60px;
+ width:65px;
+ margin-top:10px;
+ filter:drop-shadow(0 0 10px rgba(255,255,255,.25));
 }
+
+/* MENU */
 
 .menu-container{
- display:flex;
- flex-wrap:wrap;
- justify-content:center;
- padding:20px;
- padding-bottom:180px;
+ display:grid;
+ grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+ gap:22px;
+ padding:25px;
+ padding-bottom:220px;
+ max-width:1400px;
+ margin:auto;
 }
 
+/* PRODUCTOS */
+
 .product{
- width:180px;
- background:white;
- margin:15px;
- border-radius:14px;
+ background:rgba(255,255,255,.08);
+ border:1px solid rgba(255,255,255,.08);
+ border-radius:28px;
  overflow:hidden;
- box-shadow:0 4px 10px rgba(0,0,0,0.12);
  cursor:pointer;
- transition:.2s;
+ transition:.25s;
+ backdrop-filter:blur(10px);
+ box-shadow:0 10px 30px rgba(0,0,0,.30);
+ position:relative;
 }
 
 .product:hover{
- transform:scale(1.03);
+ transform:translateY(-6px) scale(1.02);
+ box-shadow:0 20px 45px rgba(0,0,0,.45);
 }
 
 .product img{
  width:100%;
- height:140px;
+ height:190px;
  object-fit:cover;
+}
+
+.product h3{
+ font-size:20px;
+ margin-top:16px;
+ padding:0 12px;
+ color:white;
+}
+
+.product p{
+ margin:14px 0 18px;
+ font-size:22px;
+ font-weight:700;
+ color:#22c55e;
 }
 
 /* BOTONES */
 
 button{
- transition:all .15s ease;
- box-shadow:0 4px 0 rgba(0,0,0,.2);
-}
-
-button:active{
- transform:translateY(3px);
- box-shadow:0 1px 0 rgba(0,0,0,.2);
+ transition:all .2s ease;
 }
 
 .btn-grid{
@@ -82,75 +138,84 @@ button:active{
  bottom:15px;
  display:grid;
  grid-template-columns:1fr 1fr;
- gap:10px;
+ gap:12px;
  z-index:10000;
 }
 
 .btn-flotante{
- width:150px;
- height:52px;
- color:#fff;
+ width:165px;
+ height:58px;
  border:none;
- border-radius:14px;
- font-weight:bold;
+ border-radius:18px;
+ font-weight:700;
  cursor:pointer;
  font-size:15px;
+ color:white;
+ backdrop-filter:blur(10px);
+ box-shadow:0 10px 25px rgba(0,0,0,.35);
+}
+
+.btn-flotante:hover{
+ transform:translateY(-2px);
 }
 
 #btnHamburguesas{
- background:#28a745;
+ background:#22c55e;
 }
 
 #btnBebidas{
- background:#2196f3;
+ background:#3b82f6;
 }
 
 #btnLomitos{
- background:#ff9800;
+ background:#f59e0b;
  color:black;
 }
 
 #btnCarrito{
- background:#ff5722;
+ background:#ef4444;
 }
 
 /* TOTAL */
 
 #mensaje-total{
  display:none;
- background:#28a745;
+ background:rgba(34,197,94,.95);
  color:#fff;
- padding:10px 16px;
- border-radius:12px;
- font-weight:bold;
- box-shadow:0 4px 10px rgba(0,0,0,0.25);
+ padding:14px 18px;
+ border-radius:16px;
+ font-weight:700;
+ box-shadow:0 10px 30px rgba(0,0,0,.35);
  text-align:center;
  position:fixed;
- bottom:135px;
+ bottom:145px;
  left:50%;
  transform:translateX(-50%);
  z-index:9999;
- min-width:240px;
+ min-width:260px;
+ backdrop-filter:blur(10px);
 }
 
 /* PEDIDO */
 
 #pedido-flotante{
  position:fixed;
- bottom:185px;
+ bottom:210px;
  left:50%;
  transform:translateX(-50%) translateY(120px);
- background:#fff;
- padding:18px;
- border-radius:18px;
- box-shadow:0 12px 35px rgba(0,0,0,.25);
+ background:rgba(17,24,39,.95);
+ border:1px solid rgba(255,255,255,.08);
+ padding:22px;
+ border-radius:24px;
+ box-shadow:0 20px 45px rgba(0,0,0,.45);
  opacity:0;
  transition:all .35s ease;
  z-index:9999;
- width:90%;
- max-width:340px;
+ width:92%;
+ max-width:390px;
  text-align:center;
  pointer-events:none;
+ backdrop-filter:blur(15px);
 }
 
 #pedido-flotante.activo{
@@ -160,7 +225,8 @@ button:active{
 }
 
 #pedido-flotante h3{
- margin-top:0;
+ margin-bottom:16px;
+ color:#facc15;
 }
 
 #pedido-flotante ul{
@@ -169,49 +235,53 @@ button:active{
  margin:0;
 }
 
-.acciones-pedido{
- display:flex;
- justify-content:space-between;
- gap:10px;
- margin-top:10px;
-}
-
-.acciones-pedido button{
- flex:1;
- padding:10px;
- border:none;
- border-radius:8px;
- font-weight:bold;
- cursor:pointer;
-}
-
-#btn-borrar{
- background:#e53935;
- color:white;
-}
-
-#enviar-whatsapp{
- background:#2e7d32;
- color:white;
-}
-
-/* ITEMS */
-
 .item-pedido{
  display:flex;
  justify-content:space-between;
  align-items:center;
- margin:6px 0;
+ margin:10px 0;
+ background:rgba(255,255,255,.05);
+ padding:10px;
+ border-radius:12px;
 }
 
 .btn-eliminar{
- background:#e53935;
+ background:#ef4444;
  color:white;
  border:none;
  border-radius:50%;
- width:26px;
- height:26px;
+ width:28px;
+ height:28px;
  cursor:pointer;
+}
+
+/* ACCIONES */
+
+.acciones-pedido{
+ display:flex;
+ justify-content:space-between;
+ gap:10px;
+ margin-top:16px;
+}
+
+.acciones-pedido button{
+ flex:1;
+ padding:13px;
+ border:none;
+ border-radius:14px;
+ font-weight:700;
+ cursor:pointer;
+ font-size:14px;
+}
+
+#btn-borrar{
+ background:#dc2626;
+ color:white;
+}
+
+#enviar-whatsapp{
+ background:#16a34a;
+ color:white;
 }
 
 /* MODAL */
@@ -223,36 +293,77 @@ button:active{
  left:0;
  width:100%;
  height:100%;
- background:#0008;
+ background:rgba(0,0,0,.75);
  justify-content:center;
  align-items:center;
  z-index:99999;
+ backdrop-filter:blur(6px);
 }
 
 .modal-content{
- background:white;
- padding:24px;
- border-radius:16px;
- width:300px;
+ background:#111827;
+ border:1px solid rgba(255,255,255,.08);
+ padding:28px;
+ border-radius:28px;
+ width:320px;
  text-align:center;
- box-shadow:0 10px 30px rgba(0,0,0,.3);
+ box-shadow:0 20px 50px rgba(0,0,0,.5);
+ color:white;
+}
+
+.modal-content h3{
+ margin-bottom:16px;
+ color:#facc15;
 }
 
 .modal-content input{
- width:80px;
- font-size:20px;
+ width:100px;
+ font-size:24px;
  text-align:center;
- padding:8px;
+ padding:10px;
  margin-top:10px;
+ border:none;
+ border-radius:14px;
+ background:#1f2937;
+ color:white;
 }
 
 .modal-content button{
- padding:10px 18px;
- margin:10px 5px 0;
+ padding:12px 18px;
+ margin:12px 5px 0;
  border:none;
- border-radius:8px;
- font-weight:bold;
+ border-radius:12px;
+ font-weight:700;
  cursor:pointer;
+}
+
+/* RESPONSIVE */
+
+@media(max-width:700px){
+
+ .menu-container{
+  grid-template-columns:repeat(2,1fr);
+  gap:16px;
+  padding:16px;
+ }
+
+ .product{
+  border-radius:22px;
+ }
+
+ .product img{
+  height:150px;
+ }
+
+ .btn-flotante{
+  width:145px;
+  height:54px;
+  font-size:13px;
+ }
+
+ header h1{
+  font-size:30px;
+ }
 }
 
 </style>
@@ -285,15 +396,15 @@ button:active{
 
   <br><br>
 
-  <button id="btn-entera" style="background:#28a745;color:white;">
+  <button id="btn-entera" style="background:#22c55e;color:white;">
    Entera
   </button>
 
-  <button id="btn-mitad" style="background:#ff9800;color:white;">
+  <button id="btn-mitad" style="background:#f59e0b;color:white;">
    Mitad
   </button>
 
-  <button id="btn-cancelar" style="background:#f44336;color:white;">
+  <button id="btn-cancelar" style="background:#ef4444;color:white;">
    Cancelar
   </button>
 
@@ -354,373 +465,6 @@ MI PEDIDO
   </div>
 
 </div>
-
-<!-- FIREBASE -->
-
-<script type="module">
-
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
-
-import {
- getDatabase,
- ref,
- push,
- onValue,
- remove
-} from "https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";
-
-/* MESA */
-
-const params =
-new URLSearchParams(window.location.search);
-
-const mesa =
-params.get("mesa") || "general";
-
-/* FIREBASE */
-
-const firebaseConfig = {
-
- apiKey: "AIzaSyADGYsqhbCFuKj2fXpontLpND_rtT7Nlno",
-
- authDomain: "alorico-59754.firebaseapp.com",
-
- databaseURL: "https://alorico-59754-default-rtdb.firebaseio.com",
-
- projectId: "alorico-59754"
-};
-
-const app = initializeApp(firebaseConfig);
-
-const db = getDatabase(app);
-
-/* CLIENTE */
-
-const clienteId =
-"mesa_" + mesa;
-
-const pedidoRef =
-ref(db,"pedidos/" + clienteId);
-
-/* TITULO */
-
-document.getElementById("titulo-pedido")
-.innerText =
-`Mi Pedido - Mesa ${mesa}`;
-
-/* BOTONES */
-
-const btnHamburguesas =
-document.getElementById("btnHamburguesas");
-
-const btnBebidas =
-document.getElementById("btnBebidas");
-
-const btnLomitos =
-document.getElementById("btnLomitos");
-
-const btnCarrito =
-document.getElementById("btnCarrito");
-
-/* NAVEGACION */
-
-btnHamburguesas.onclick = ()=>{
-
- location.href =
- `https://alo-rico.github.io/hamburguesa/?mesa=${mesa}`;
-};
-
-btnBebidas.onclick = ()=>{
-
- location.href =
- `https://alo-rico.github.io/bebidas/?mesa=${mesa}`;
-};
-
-btnLomitos.onclick = ()=>{
-
- location.href =
- `https://alo-rico.github.io/lomitos/?mesa=${mesa}`;
-};
-
-/* CARRITO */
-
-btnCarrito.onclick = ()=>{
-
- const p =
- document.getElementById("pedido-flotante");
-
- p.classList.toggle("activo");
-
- if(p.classList.contains("activo")){
-
-  setTimeout(()=>{
-
-   p.classList.remove("activo");
-
-  },7000);
- }
-};
-
-/* LISTEN PEDIDO */
-
-onValue(pedidoRef,(snap)=>{
-
- const data=snap.val();
-
- let total=0;
-
- const lista=
- document.getElementById("lista-pedido");
-
- lista.innerHTML="";
-
- if(data){
-
-  Object.entries(data).forEach(([key,p])=>{
-
-   total += p.precio * p.cantidad;
-
-   const li =
-   document.createElement("li");
-
-   li.className="item-pedido";
-
-   li.innerHTML=`
-     ${p.nombre} x${p.cantidad}
-     <button class="btn-eliminar">
-      🗑
-     </button>
-   `;
-
-   li.querySelector(".btn-eliminar")
-   .onclick=()=>{
-
-     remove(
-      ref(db,"pedidos/"+clienteId+"/"+key)
-     );
-   };
-
-   lista.appendChild(li);
-  });
- }
-
- document.getElementById("total-pedido")
- .innerText =
- "Gs. " + total.toLocaleString();
-
- const mensaje =
- document.getElementById("mensaje-total");
-
- if(total > 0){
-
-  mensaje.style.display = "block";
-
-  mensaje.innerText =
-  `💰 Mesa ${mesa} - Total: Gs. ${total.toLocaleString()}`;
-
- }else{
-
-  mensaje.style.display = "none";
- }
-});
-
-/* MODAL */
-
-let productoSeleccionado={};
-
-let mitadPendiente = null;
-
-window.abrirPopup=(n,p)=>{
-
- productoSeleccionado={
-  nombre:n,
-  precio:p
- };
-
- document.getElementById("modal")
- .style.display="flex";
-
- document.getElementById("modal-titulo")
- .innerText=n;
-};
-
-/* ENTERA */
-
-document.getElementById("btn-entera")
-.onclick = ()=>{
-
- const cant =
- parseInt(
-  document.getElementById("cantidad-input").value
- ) || 1;
-
- push(pedidoRef,{
-
-  nombre: productoSeleccionado.nombre,
-
-  precio: productoSeleccionado.precio,
-
-  cantidad: cant
- });
-
- document.getElementById("modal")
- .style.display="none";
-};
-
-/* MITAD */
-
-document.getElementById("btn-mitad")
-.onclick = ()=>{
-
- const nombre =
- productoSeleccionado.nombre;
-
- const precio =
- productoSeleccionado.precio;
-
- if(!mitadPendiente){
-
-  mitadPendiente = {
-   nombre,
-   precio
-  };
-
-  document.getElementById("modal")
-  .style.display="none";
-
-  alert("Elegí la otra mitad");
-
- }else{
-
-  const nombre1 =
-  mitadPendiente.nombre;
-
-  const nombre2 =
-  nombre;
-
-  push(pedidoRef,{
-
-   nombre:
-   `½ ${nombre1} + ½ ${nombre2}`,
-
-   precio:
-   Math.max(
-    mitadPendiente.precio,
-    precio
-   ),
-
-   cantidad:1
-  });
-
-  mitadPendiente = null;
-
-  document.getElementById("modal")
-  .style.display="none";
- }
-};
-
-/* CANCELAR */
-
-document.getElementById("btn-cancelar")
-.onclick=()=>{
-
- document.getElementById("modal")
- .style.display="none";
-};
-
-/* BORRAR */
-
-document.getElementById("btn-borrar")
-.onclick=()=>{
-
- remove(pedidoRef);
-};
-
-/* WHATSAPP */
-
-document.getElementById("enviar-whatsapp")
-.onclick=()=>{
-
- onValue(pedidoRef,(snap)=>{
-
-  const data=snap.val();
-
-  if(!data){
-
-   alert("Sin pedido");
-
-   return;
-  }
-
-  let txt="";
-
-  let total=0;
-
-  Object.values(data).forEach(p=>{
-
-   txt +=
-   `- ${p.nombre} x${p.cantidad}%0A`;
-
-   total +=
-   p.precio * p.cantidad;
-  });
-
-  const msg =
-  `Hola envio mi pedido - Mesa ${mesa}:%0A${txt}%0ATotal: Gs. ${total.toLocaleString()}`;
-
-  window.open(
-   `https://wa.me/+595971891251?text=${msg}`
-  );
-
- },{onlyOnce:true});
-};
-
-/* MENU FIREBASE */
-
-const menuRef =
-ref(db,"productos");
-
-onValue(menuRef,(snap)=>{
-
- const data = snap.val();
-
- const menu =
- document.getElementById("menu");
-
- menu.innerHTML = "";
-
- if(data){
-
-  Object.values(data).forEach((i)=>{
-
-   if(i.categoria !== "pizza") return;
-
-   const div =
-   document.createElement("div");
-
-   div.className = "product";
-
-   div.innerHTML = `
-    <img src="${i.imagen}">
-    <h3>${i.nombre}</h3>
-    <p>Gs. ${Number(i.precio).toLocaleString()}</p>
-   `;
-
-   div.onclick = ()=>{
-
-    abrirPopup(
-      i.nombre,
-      Number(i.precio)
-    );
-   };
-
-   menu.appendChild(div);
-
-  });
- }
-});
-
-</script>
 
 </body>
 </html>
