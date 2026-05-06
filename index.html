@@ -675,34 +675,49 @@ document.getElementById("enviar-whatsapp")
  },{onlyOnce:true});
 };
 
-/* MENU */
+/* MENU FIREBASE */
 
-const res =
-await fetch("precios.json");
+const menuRef =
+ref(db,"productos");
 
-const productos =
-await res.json();
+onValue(menuRef,(snap)=>{
 
-Object.entries(productos).forEach(([n,i])=>{
+ const data = snap.val();
 
- const div =
- document.createElement("div");
+ const menu =
+ document.getElementById("menu");
 
- div.className="product";
+ menu.innerHTML = "";
 
- div.innerHTML=`
-  <img src="${i.imagen}?v=${Date.now()}">
-  <h3>${n}</h3>
-  <p>Gs. ${i.precio}</p>
- `;
+ if(data){
 
- div.onclick=()=>{
+  Object.values(data).forEach((i)=>{
 
-  abrirPopup(n,i.precio);
- };
+   if(i.categoria !== "pizza") return;
 
- document.getElementById("menu")
- .appendChild(div);
+   const div =
+   document.createElement("div");
+
+   div.className = "product";
+
+   div.innerHTML = `
+    <img src="${i.imagen}">
+    <h3>${i.nombre}</h3>
+    <p>Gs. ${Number(i.precio).toLocaleString()}</p>
+   `;
+
+   div.onclick = ()=>{
+
+    abrirPopup(
+      i.nombre,
+      Number(i.precio)
+    );
+   };
+
+   menu.appendChild(div);
+
+  });
+ }
 });
 
 </script>
