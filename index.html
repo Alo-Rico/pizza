@@ -738,9 +738,14 @@ document.getElementById("enviar-whatsapp").onclick = ()=>{
   const mensaje =
   `Hola envio mi pedido - Mesa ${mesa}:%0A%0A${txt}%0ATOTAL: Gs. ${total.toLocaleString()}`;
 
-  window.open(
-   `https://wa.me/+595971891251?text=${mensaje}`
-  );
+window.open(
+ `https://wa.me/+595971891251?text=${mensaje}`
+);
+
+remove(pedidoRef);
+
+document.getElementById("pedido-flotante")
+.classList.remove("activo");
 
  },{onlyOnce:true});
 };
