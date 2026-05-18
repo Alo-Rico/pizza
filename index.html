@@ -426,7 +426,6 @@ import {
  getDatabase,
  ref,
  push,
- set,
  get,
  onValue,
  remove
@@ -768,13 +767,8 @@ async function enviarPedido(){
    items: d
   };
 
-  const nuevoPedidoRef =
-  push(
-   ref(db,"pedidos_cocina")
-  );
-
-  await set(
-   nuevoPedidoRef,
+  await push(
+   ref(db,"pedidos_cocina"),
    pedidoFinal
   );
 
