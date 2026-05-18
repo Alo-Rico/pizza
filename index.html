@@ -427,6 +427,7 @@ import {
  ref,
  push,
  set,
+ get,
  onValue,
  remove
 } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";
@@ -710,10 +711,7 @@ onValue(pedidoRef,(snap)=>{
   mensaje.innerText =
   `💰 Mesa ${mesa} - Total: Gs. ${total.toLocaleString()}`;
 
-  mensaje.onclick = ()=>{
-
-   enviarPedido();
-  };
+  mensaje.onclick = enviarPedido;
 
  }else{
 
@@ -734,73 +732,72 @@ async function enviarPedido(){
 
  enviandoPedido = true;
 
- const snap =
- await new Promise(resolve=>{
+ try{
 
-  onValue(
-   pedidoRef,
-   resolve,
-   {onlyOnce:true}
+  const snap =
+  await get(pedidoRef);
+
+  const d = snap.val();
+
+  if(!d){
+
+   alert("Sin pedido");
+
+   enviandoPedido = false;
+
+   return;
+  }
+
+  let total = 0;
+
+  Object.values(d).forEach(p=>{
+
+   total += p.precio * p.cantidad;
+  });
+
+  const pedidoFinal = {
+
+   mesa: mesa,
+
+   estado: "pendiente",
+
+   timestamp: Date.now(),
+
+   total: total,
+
+   items: d
+  };
+
+  const nuevoPedidoRef =
+  push(
+   ref(db,"pedidos_cocina")
   );
 
- });
+  await set(
+   nuevoPedidoRef,
+   pedidoFinal
+  );
 
- const d = snap.val();
+  await remove(pedidoRef);
 
- if(!d){
+  document.getElementById("pedido-flotante")
+  .classList.remove("activo");
 
-  alert("Sin pedido");
+  alert("Pedido enviado correctamente ✔");
 
-  enviandoPedido = false;
+ }catch(e){
 
-  return;
+  console.error(e);
+
+  alert("Error enviando pedido");
+
  }
-
- let total = 0;
-
- Object.values(d).forEach(p=>{
-
-  total += p.precio * p.cantidad;
- });
-
- const pedidoFinal = {
-
-  mesa: mesa,
-
-  estado: "pendiente",
-
-  timestamp: Date.now(),
-
-  total: total,
-
-  items: d
- };
-
- const nuevoPedidoRef =
- push(
-  ref(db,"pedidos_cocina")
- );
-
- await set(
-  nuevoPedidoRef,
-  pedidoFinal
- );
-
- await remove(pedidoRef);
-
- document.getElementById("pedido-flotante")
- .classList.remove("activo");
-
- alert("Pedido enviado correctamente ✔");
 
  enviandoPedido = false;
 }
 
 document.getElementById("enviar-cocina")
-.addEventListener(
- "click",
- enviarPedido
-);
+.onclick = enviarPedido;
 
 </script>
 
