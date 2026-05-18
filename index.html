@@ -166,6 +166,7 @@ header img.icono{
  transform:translateX(-50%);
  z-index:9999;
  min-width:260px;
+ cursor:pointer;
 }
 
 #pedido-flotante{
@@ -319,7 +320,7 @@ header img.icono{
 <div id="pedido-flotante">
 
 <h3 id="titulo-pedido">
-Mi Pedido
+Enviar Pedido
 </h3>
 
 <ul id="lista-pedido"></ul>
@@ -412,7 +413,7 @@ LOMITOS
 </button>
 
 <button id="btnCarrito" class="btn-flotante">
-MI PEDIDO
+ENVIAR PEDIDO
 </button>
 
 </div>
@@ -459,7 +460,7 @@ ref(db,"pedidos/" + clienteId);
 
 document.getElementById("titulo-pedido")
 .innerText =
-`Mi Pedido - Mesa ${mesa}`;
+`Enviar Pedido - Mesa ${mesa}`;
 
 document.getElementById("btnHamburguesas").onclick = ()=>{
 
@@ -479,10 +480,22 @@ document.getElementById("btnLomitos").onclick = ()=>{
  `https://alo-rico.github.io/lomitos/?mesa=${mesa}`;
 };
 
+let timeoutPedido = null;
+
 document.getElementById("btnCarrito").onclick = ()=>{
 
- document.getElementById("pedido-flotante")
- .classList.toggle("activo");
+ const popup =
+ document.getElementById("pedido-flotante");
+
+ popup.classList.add("activo");
+
+ clearTimeout(timeoutPedido);
+
+ timeoutPedido = setTimeout(()=>{
+
+  popup.classList.remove("activo");
+
+ },7000);
 };
 
 const menuRef =
@@ -697,6 +710,11 @@ onValue(pedidoRef,(snap)=>{
   mensaje.innerText =
   `💰 Mesa ${mesa} - Total: Gs. ${total.toLocaleString()}`;
 
+  mensaje.onclick = ()=>{
+
+   document.getElementById("enviar-cocina").click();
+  };
+
  }else{
 
   mensaje.style.display = "none";
@@ -708,60 +726,68 @@ document.getElementById("btn-borrar").onclick = ()=>{
  remove(pedidoRef);
 };
 
-document.getElementById("enviar-cocina").onclick = ()=>{
+async function enviarPedido(){
 
- onValue(pedidoRef,(snap)=>{
+ const snap =
+ await new Promise(resolve=>{
 
-  const d = snap.val();
-
-  if(!d){
-
-   alert("Sin pedido");
-
-   return;
-  }
-
-  let total = 0;
-
-  Object.values(d).forEach(p=>{
-
-   total += p.precio * p.cantidad;
-  });
-
-  const pedidoFinal = {
-
-   mesa: mesa,
-
-   estado: "pendiente",
-
-   timestamp: Date.now(),
-
-   total: total,
-
-   items: d
-  };
-
-  const nuevoPedidoRef =
-  push(
-   ref(db,"pedidos_cocina")
+  onValue(
+   pedidoRef,
+   resolve,
+   {onlyOnce:true}
   );
 
-  set(
-   nuevoPedidoRef,
-   pedidoFinal
-  ).then(()=>{
+ });
 
-   remove(pedidoRef);
+ const d = snap.val();
 
-   document.getElementById("pedido-flotante")
-   .classList.remove("activo");
+ if(!d){
 
-   alert("Pedido enviado correctamente ✔");
+  alert("Sin pedido");
 
-  });
+  return;
+ }
 
- },{onlyOnce:true});
-};
+ let total = 0;
+
+ Object.values(d).forEach(p=>{
+
+  total += p.precio * p.cantidad;
+ });
+
+ const pedidoFinal = {
+
+  mesa: mesa,
+
+  estado: "pendiente",
+
+  timestamp: Date.now(),
+
+  total: total,
+
+  items: d
+ };
+
+ const nuevoPedidoRef =
+ push(
+  ref(db,"pedidos_cocina")
+ );
+
+ await set(
+  nuevoPedidoRef,
+  pedidoFinal
+ );
+
+ await remove(pedidoRef);
+
+ document.getElementById("pedido-flotante")
+ .classList.remove("activo");
+
+ alert("Pedido enviado correctamente ✔");
+}
+
+document.getElementById("enviar-cocina")
+.onclick = enviarPedido;
 
 </script>
 
