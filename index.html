@@ -712,7 +712,7 @@ onValue(pedidoRef,(snap)=>{
 
   mensaje.onclick = ()=>{
 
-   document.getElementById("enviar-cocina").click();
+   enviarPedido();
   };
 
  }else{
@@ -726,7 +726,13 @@ document.getElementById("btn-borrar").onclick = ()=>{
  remove(pedidoRef);
 };
 
+let enviandoPedido = false;
+
 async function enviarPedido(){
+
+ if(enviandoPedido) return;
+
+ enviandoPedido = true;
 
  const snap =
  await new Promise(resolve=>{
@@ -744,6 +750,8 @@ async function enviarPedido(){
  if(!d){
 
   alert("Sin pedido");
+
+  enviandoPedido = false;
 
   return;
  }
@@ -784,10 +792,15 @@ async function enviarPedido(){
  .classList.remove("activo");
 
  alert("Pedido enviado correctamente ✔");
+
+ enviandoPedido = false;
 }
 
 document.getElementById("enviar-cocina")
-.onclick = enviarPedido;
+.addEventListener(
+ "click",
+ enviarPedido
+);
 
 </script>
 
