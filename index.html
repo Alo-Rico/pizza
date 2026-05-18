@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Menú Alo Rico - Pizzas</title>
+<title>Alo Rico - Mesas</title>
 
 <style>
 
@@ -21,7 +21,6 @@ body{
  font-family:'Poppins',sans-serif;
  background:#111827;
  color:white;
- text-align:center;
  min-height:100vh;
  overflow-x:hidden;
 }
@@ -31,7 +30,7 @@ body::before{
  position:fixed;
  inset:0;
  background:
- linear-gradient(rgba(0,0,0,.82),rgba(0,0,0,.90)),
+ linear-gradient(rgba(0,0,0,.84),rgba(0,0,0,.92)),
  url('https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=1600&auto=format&fit=crop');
  background-size:cover;
  background-position:center;
@@ -47,10 +46,11 @@ body::after{
 }
 
 header{
- padding:30px 20px 10px;
+ text-align:center;
+ padding:30px 20px 15px;
 }
 
-header img.logo{
+.logo{
  width:120px;
  border-radius:50%;
  border:4px solid #facc15;
@@ -58,16 +58,57 @@ header img.logo{
  box-shadow:0 0 35px rgba(250,204,21,.35);
 }
 
-header h1{
- font-size:38px;
- margin-top:18px;
+h1{
+ margin-top:20px;
+ font-size:40px;
  color:#facc15;
- font-weight:700;
 }
 
-header img.icono{
- width:65px;
+.sub{
+ color:#d1d5db;
  margin-top:10px;
+ font-size:18px;
+}
+
+.categorias{
+ display:grid;
+ grid-template-columns:repeat(4,1fr);
+ gap:12px;
+ width:95%;
+ max-width:900px;
+ margin:25px auto;
+}
+
+.cat-btn{
+ padding:16px;
+ border:none;
+ border-radius:18px;
+ color:white;
+ font-weight:bold;
+ cursor:pointer;
+ font-size:14px;
+ transition:.25s;
+}
+
+.cat-btn:hover{
+ transform:translateY(-3px);
+}
+
+#btnPizza{
+ background:#ef4444;
+}
+
+#btnHamburguesa{
+ background:#22c55e;
+}
+
+#btnLomito{
+ background:#f59e0b;
+ color:black;
+}
+
+#btnBebida{
+ background:#3b82f6;
 }
 
 .menu-container{
@@ -75,7 +116,7 @@ header img.icono{
  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
  gap:22px;
  padding:25px;
- padding-bottom:320px;
+ padding-bottom:170px;
  max-width:1400px;
  margin:auto;
 }
@@ -92,7 +133,7 @@ header img.icono{
 }
 
 .product:hover{
- transform:translateY(-6px) scale(1.02);
+ transform:translateY(-6px);
 }
 
 .product img{
@@ -105,151 +146,81 @@ header img.icono{
  font-size:20px;
  margin-top:16px;
  padding:0 12px;
- color:white;
+ text-align:center;
 }
 
 .product p{
  margin:14px 0 24px;
+ text-align:center;
  font-size:22px;
  font-weight:700;
  color:#22c55e;
 }
 
-.btn-grid{
- position:fixed;
- right:15px;
- bottom:15px;
- display:grid;
- grid-template-columns:1fr 1fr;
- gap:12px;
- z-index:10000;
-}
-
-.btn-flotante{
- width:165px;
- height:58px;
- border:none;
- border-radius:18px;
- font-weight:700;
- cursor:pointer;
- font-size:15px;
- color:white;
-}
-
-#btnHamburguesas{
- background:#22c55e;
-}
-
-#btnBebidas{
- background:#3b82f6;
-}
-
-#btnLomitos{
- background:#f59e0b;
- color:black;
-}
-
-#btnCarrito{
- background:#ef4444;
-}
-
-#mensaje-total{
+#pedido-flotante{
  display:none;
- background:#22c55e;
- color:#fff;
- padding:14px 18px;
- border-radius:16px;
- font-weight:700;
  position:fixed;
- bottom:145px;
+ bottom:90px;
  left:50%;
  transform:translateX(-50%);
- z-index:9999;
- min-width:260px;
- cursor:pointer;
-}
-
-#pedido-flotante{
- position:fixed;
- bottom:210px;
- left:50%;
- transform:translateX(-50%) translateY(120px);
+ width:95%;
+ max-width:500px;
  background:#111827;
+ border-radius:28px;
+ padding:24px;
  border:1px solid rgba(255,255,255,.08);
- padding:22px;
- border-radius:24px;
- opacity:0;
- transition:all .35s ease;
+ box-shadow:0 10px 40px rgba(0,0,0,.45);
  z-index:9999;
- width:92%;
- max-width:390px;
- text-align:center;
- pointer-events:none;
 }
 
-#pedido-flotante.activo{
- transform:translateX(-50%) translateY(0);
- opacity:1;
- pointer-events:auto;
-}
-
-#pedido-flotante ul{
- list-style:none;
- padding:0;
-}
-
-.item-pedido{
+.item{
  display:flex;
  justify-content:space-between;
  align-items:center;
- margin:10px 0;
  background:rgba(255,255,255,.05);
  padding:12px;
- border-radius:12px;
+ border-radius:14px;
+ margin-top:10px;
 }
 
 .btn-eliminar{
- background:#ef4444;
- color:white;
+ width:30px;
+ height:30px;
  border:none;
  border-radius:50%;
- width:28px;
- height:28px;
- cursor:pointer;
-}
-
-.acciones-pedido{
- display:flex;
- gap:10px;
- margin-top:16px;
-}
-
-.acciones-pedido button{
- flex:1;
- padding:13px;
- border:none;
- border-radius:14px;
- font-weight:700;
- cursor:pointer;
-}
-
-#btn-borrar{
- background:#dc2626;
+ background:#ef4444;
  color:white;
+ cursor:pointer;
 }
 
-#enviar-cocina{
+#total{
+ margin-top:18px;
+ font-size:28px;
+ color:#22c55e;
+ font-weight:bold;
+ text-align:center;
+}
+
+#abrir-pedido{
+ position:fixed;
+ bottom:20px;
+ right:20px;
  background:#16a34a;
  color:white;
+ border:none;
+ padding:18px 24px;
+ border-radius:20px;
+ font-weight:bold;
+ font-size:16px;
+ z-index:99999;
+ cursor:pointer;
+ box-shadow:0 10px 25px rgba(0,0,0,.35);
 }
 
-#popup-cantidad{
+#popup{
  display:none;
  position:fixed;
- top:0;
- left:0;
- width:100%;
- height:100%;
+ inset:0;
  background:rgba(0,0,0,.75);
  justify-content:center;
  align-items:center;
@@ -261,41 +232,51 @@ header img.icono{
  padding:28px;
  border-radius:24px;
  width:320px;
- color:white;
 }
 
 .popup-content input{
- width:90px;
- font-size:22px;
- text-align:center;
- padding:10px;
+ width:100%;
+ padding:14px;
  border:none;
- border-radius:12px;
+ border-radius:14px;
  background:#1f2937;
+ color:white;
+ margin-top:15px;
+}
+
+.popup-btn{
+ margin-top:15px;
+ width:100%;
+ padding:14px;
+ border:none;
+ border-radius:14px;
+ font-weight:bold;
+ cursor:pointer;
  color:white;
 }
 
 @media(max-width:700px){
 
+ .categorias{
+  grid-template-columns:repeat(2,1fr);
+ }
+
  .menu-container{
   grid-template-columns:repeat(2,1fr);
   gap:16px;
-  padding:16px;
-  padding-bottom:320px;
  }
 
  .product img{
   height:150px;
  }
 
- .btn-flotante{
-  width:145px;
-  height:54px;
-  font-size:13px;
+ h1{
+  font-size:30px;
  }
 
- header h1{
-  font-size:30px;
+ #abrir-pedido{
+  width:90%;
+  right:5%;
  }
 }
 
@@ -309,133 +290,122 @@ header img.icono{
 
 <img src="logo.png" class="logo">
 
-<h1>Menú de Pizzas</h1>
+<h1>ALO RICO</h1>
 
-<img src="Repartidor.png" class="icono">
+<p class="sub" id="mesaTexto">
+Mesa
+</p>
 
 </header>
 
+<div class="categorias">
+
+<button id="btnPizza" class="cat-btn">
+🍕 PIZZAS
+</button>
+
+<button id="btnHamburguesa" class="cat-btn">
+🍔 HAMBURGUESAS
+</button>
+
+<button id="btnLomito" class="cat-btn">
+🥪 LOMITOS
+</button>
+
+<button id="btnBebida" class="cat-btn">
+🥤 BEBIDAS
+</button>
+
+</div>
+
 <div id="menu" class="menu-container"></div>
+
+<button id="abrir-pedido">
+🛒 ENVIAR PEDIDO
+</button>
 
 <div id="pedido-flotante">
 
-<h3 id="titulo-pedido">
-Enviar Pedido
-</h3>
+<h2 style="
+text-align:center;
+font-size:28px;
+margin-bottom:15px;
+color:#facc15;
+">
+Mi Pedido
+</h2>
 
-<ul id="lista-pedido"></ul>
+<div id="lista"></div>
 
-<p id="total-pedido"></p>
-
-<div class="acciones-pedido">
-
-<button id="btn-borrar">
-Borrar
-</button>
-
-<button id="enviar-cocina">
-Enviar Pedido
-</button>
-
+<div id="total">
+Gs. 0
 </div>
 
 </div>
 
-<div id="popup-cantidad">
+<div id="popup">
 
 <div class="popup-content">
 
-<h3 id="popup-nombre"></h3>
+<h2 id="popup-nombre">
+Producto
+</h2>
 
-<input id="cantidad" type="number" value="1" min="1">
+<input
+ id="cantidad"
+ type="number"
+ value="1"
+ min="1">
 
-<br><br>
-
-<button id="btn-entera"
-style="
-background:#22c55e;
-color:white;
-padding:12px 18px;
-border:none;
-border-radius:12px;
-font-weight:bold;
-margin:5px;
-">
-🍕 Entera
+<button
+ id="btn-entera"
+ class="popup-btn"
+ style="background:#16a34a;">
+AGREGAR
 </button>
 
-<button id="btn-media"
-style="
-background:#f59e0b;
-color:white;
-padding:12px 18px;
-border:none;
-border-radius:12px;
-font-weight:bold;
-margin:5px;
-">
-🍕 Media
+<button
+ id="btn-media"
+ class="popup-btn"
+ style="background:#f59e0b;">
+🍕 MEDIA
 </button>
 
-<button onclick="cerrar()"
-style="
-background:#ef4444;
-color:white;
-padding:12px 18px;
-border:none;
-border-radius:12px;
-font-weight:bold;
-margin:5px;
-">
-Cancelar
+<button
+ onclick="cerrarPopup()"
+ class="popup-btn"
+ style="background:#ef4444;">
+CANCELAR
 </button>
 
 </div>
-
-</div>
-
-<div id="mensaje-total">
-💰 Total: Gs. 0
-</div>
-
-<div class="btn-grid">
-
-<button id="btnHamburguesas" class="btn-flotante">
-HAMBURGUESAS
-</button>
-
-<button id="btnBebidas" class="btn-flotante">
-BEBIDAS
-</button>
-
-<button id="btnLomitos" class="btn-flotante">
-LOMITOS
-</button>
-
-<button id="btnCarrito" class="btn-flotante">
-ENVIAR PEDIDO
-</button>
 
 </div>
 
 <script type="module">
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
 
 import {
  getDatabase,
  ref,
  push,
- get,
  onValue,
- remove
-} from "https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";
+ remove,
+ get
+}
+from "https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";
 
 const params =
 new URLSearchParams(window.location.search);
 
 const mesa =
-params.get("mesa") || "general";
+params.get("mesa") || "1";
+
+document.getElementById("mesaTexto")
+.innerText =
+`Mesa ${mesa}`;
 
 const firebaseConfig = {
 
@@ -443,14 +413,17 @@ const firebaseConfig = {
 
  authDomain: "alorico-59754.firebaseapp.com",
 
- databaseURL: "https://alorico-59754-default-rtdb.firebaseio.com",
+ databaseURL:
+ "https://alorico-59754-default-rtdb.firebaseio.com",
 
  projectId: "alorico-59754"
 };
 
-const app = initializeApp(firebaseConfig);
+const app =
+initializeApp(firebaseConfig);
 
-const db = getDatabase(app);
+const db =
+getDatabase(app);
 
 const clienteId =
 "mesa_" + mesa;
@@ -458,133 +431,197 @@ const clienteId =
 const pedidoRef =
 ref(db,"pedidos/" + clienteId);
 
-document.getElementById("titulo-pedido")
-.innerText =
-`Enviar Pedido - Mesa ${mesa}`;
+const menuDiv =
+document.getElementById("menu");
 
-document.getElementById("btnHamburguesas").onclick = ()=>{
+const listaDiv =
+document.getElementById("lista");
 
- location.href =
- `https://alo-rico.github.io/hamburguesa/?mesa=${mesa}`;
-};
+const totalDiv =
+document.getElementById("total");
 
-document.getElementById("btnBebidas").onclick = ()=>{
+let productoSeleccionado = null;
 
- location.href =
- `https://alo-rico.github.io/bebidas/?mesa=${mesa}`;
-};
+let categoriaActual = "pizza";
 
-document.getElementById("btnLomitos").onclick = ()=>{
+let mediaPizza = null;
 
- location.href =
- `https://alo-rico.github.io/lomitos/?mesa=${mesa}`;
-};
+const popup =
+document.getElementById("popup");
 
 let timeoutPedido = null;
 
-document.getElementById("btnCarrito").onclick = ()=>{
+document
+.getElementById("abrir-pedido")
+.onclick = ()=>{
 
- const popup =
+ const panel =
  document.getElementById("pedido-flotante");
 
- popup.classList.add("activo");
+ if(panel.style.display === "block"){
+
+  enviarPedido();
+
+  return;
+ }
+
+ panel.style.display = "block";
 
  clearTimeout(timeoutPedido);
 
  timeoutPedido = setTimeout(()=>{
 
-  popup.classList.remove("activo");
+  panel.style.display = "none";
 
  },7000);
+
 };
 
-const menuRef =
-ref(db,"productos");
+function cargarProductos(){
 
-onValue(menuRef,(snap)=>{
+ const productosRef =
+ ref(db,"productos");
 
- const data = snap.val();
+ onValue(productosRef,(snap)=>{
 
- const menu =
- document.getElementById("menu");
+  const data = snap.val();
 
- menu.innerHTML = "";
+  menuDiv.innerHTML = "";
 
- if(data){
+  if(!data) return;
 
-  Object.values(data).forEach((i)=>{
+  Object.values(data).forEach(prod=>{
 
-   if(i.categoria !== "pizza") return;
+   if(prod.categoria !== categoriaActual)
+    return;
 
    const div =
    document.createElement("div");
 
-   div.className = "product";
+   div.className =
+   "product";
 
    div.innerHTML = `
-    <img src="${i.imagen}">
-    <h3>${i.nombre}</h3>
-    <p>Gs. ${Number(i.precio).toLocaleString()}</p>
+
+   <img src="${prod.imagen}">
+
+   <h3>${prod.nombre}</h3>
+
+   <p>
+    Gs. ${Number(prod.precio).toLocaleString()}
+   </p>
+
    `;
 
    div.onclick = ()=>{
 
-    abrir(i.nombre,Number(i.precio));
+    productoSeleccionado = prod;
+
+    document.getElementById("popup-nombre")
+    .innerText = prod.nombre;
+
+    document.getElementById("cantidad")
+    .value = 1;
+
+    popup.style.display = "flex";
+
+    if(categoriaActual !== "pizza"){
+
+     document.getElementById("btn-media")
+     .style.display = "none";
+
+     document.getElementById("btn-entera")
+     .innerText = "AGREGAR";
+
+    }else{
+
+     document.getElementById("btn-media")
+     .style.display = "block";
+
+     document.getElementById("btn-entera")
+     .innerText = "🍕 ENTERA";
+    }
+
    };
 
-   menu.appendChild(div);
+   menuDiv.appendChild(div);
+
   });
- }
-});
 
-let seleccionado = {};
-let mediaPizza = null;
+ });
 
-window.abrir = (n,p)=>{
+}
 
- seleccionado = {
-  nombre:n,
-  precio:p
- };
+cargarProductos();
 
- document.getElementById("popup-nombre")
- .innerText = n;
+document.getElementById("btnPizza")
+.onclick = ()=>{
 
- document.getElementById("cantidad")
- .value = 1;
-
- document.getElementById("popup-cantidad")
- .style.display = "flex";
+ categoriaActual = "pizza";
+ cargarProductos();
 };
 
-window.cerrar = ()=>{
+document.getElementById("btnHamburguesa")
+.onclick = ()=>{
 
- document.getElementById("popup-cantidad")
- .style.display = "none";
+ categoriaActual = "hamburguesa";
+ cargarProductos();
+};
+
+document.getElementById("btnLomito")
+.onclick = ()=>{
+
+ categoriaActual = "lomitos";
+ cargarProductos();
+};
+
+document.getElementById("btnBebida")
+.onclick = ()=>{
+
+ categoriaActual = "bebidas";
+ cargarProductos();
+};
+
+window.cerrarPopup = ()=>{
+
+ popup.style.display = "none";
 };
 
 document.getElementById("btn-entera")
 .onclick = ()=>{
 
- const cant =
+ const cantidad =
  parseInt(
   document.getElementById("cantidad").value
  ) || 1;
 
  push(pedidoRef,{
-  nombre:seleccionado.nombre,
-  precio:seleccionado.precio,
-  cantidad:cant,
-  tipo:"Pizza Entera"
+
+  nombre:
+  productoSeleccionado.nombre,
+
+  precio:
+  Number(productoSeleccionado.precio),
+
+  cantidad,
+
+  categoria:
+  productoSeleccionado.categoria,
+
+  tipo:
+  categoriaActual === "pizza"
+  ? "Pizza Entera"
+  : "Normal"
+
  });
 
- cerrar();
+ popup.style.display = "none";
 };
 
 document.getElementById("btn-media")
 .onclick = ()=>{
 
- const cant =
+ const cantidad =
  parseInt(
   document.getElementById("cantidad").value
  ) || 1;
@@ -592,136 +629,134 @@ document.getElementById("btn-media")
  if(!mediaPizza){
 
   mediaPizza = {
-   nombre:seleccionado.nombre,
-   precio:seleccionado.precio,
-   cantidad:cant
+
+   nombre:
+   productoSeleccionado.nombre,
+
+   precio:
+   Number(productoSeleccionado.precio),
+
+   cantidad
+
   };
 
-  cerrar();
+  popup.style.display = "none";
 
-  alert("Ahora elige la otra mitad 🍕");
+  alert(
+   "Ahora selecciona la otra mitad 🍕"
+  );
 
  }else{
 
   const nombreFinal =
-  mediaPizza.nombre + " / " + seleccionado.nombre;
+  mediaPizza.nombre +
+  " / " +
+  productoSeleccionado.nombre;
 
   const precioFinal =
   Math.max(
    mediaPizza.precio,
-   seleccionado.precio
+   Number(productoSeleccionado.precio)
   );
 
   push(pedidoRef,{
+
    nombre:nombreFinal,
+
    precio:precioFinal,
+
    cantidad:mediaPizza.cantidad,
+
+   categoria:"pizza",
+
    tipo:"Media y Media"
+
   });
 
   mediaPizza = null;
 
-  cerrar();
+  popup.style.display = "none";
  }
+
 };
 
 onValue(pedidoRef,(snap)=>{
 
  const data = snap.val();
 
- const lista =
- document.getElementById("lista-pedido");
-
- lista.innerHTML = "";
+ listaDiv.innerHTML = "";
 
  let total = 0;
 
  if(data){
 
-  Object.entries(data).forEach(([k,p])=>{
+  Object.entries(data)
+  .forEach(([id,p])=>{
 
-   total += p.precio * p.cantidad;
+   total +=
+   p.precio * p.cantidad;
 
-   const li =
-   document.createElement("li");
+   const div =
+   document.createElement("div");
 
-   li.className = "item-pedido";
+   div.className = "item";
 
-   li.innerHTML = `
+   div.innerHTML = `
 
-   <div style="
-   display:flex;
-   flex-direction:column;
-   align-items:flex-start;
-   text-align:left;
-   ">
+    <div>
 
-   <span style="
-   font-weight:600;
-   font-size:15px;
-   ">
-   ${p.cantidad} x ${p.nombre}
-   </span>
+     <p>
+      ${p.cantidad}x ${p.nombre}
+     </p>
 
-   <span style="
-   font-size:13px;
-   color:#facc15;
-   margin-top:4px;
-   ">
-   ${p.tipo || "Pizza"}
-   </span>
+     <p style="
+      color:#facc15;
+      font-size:13px;
+      margin-top:4px;
+     ">
+      ${p.tipo || ""}
+     </p>
 
-   <span style="
-   font-size:14px;
-   color:#22c55e;
-   margin-top:3px;
-   font-weight:bold;
-   ">
-   Gs. ${(p.precio * p.cantidad).toLocaleString()}
-   </span>
+     <p style="
+      color:#22c55e;
+      font-weight:bold;
+      margin-top:4px;
+     ">
+      Gs. ${(p.precio * p.cantidad)
+      .toLocaleString()}
+     </p>
 
-   </div>
+    </div>
 
-   <button class="btn-eliminar">
-   🗑
-   </button>
+    <button
+     class="btn-eliminar">
+     🗑
+    </button>
+
    `;
 
-   li.querySelector("button").onclick = ()=>{
+   div.querySelector("button")
+   .onclick = ()=>{
 
-    remove(ref(db,"pedidos/" + clienteId + "/" + k));
+    remove(
+     ref(
+      db,
+      "pedidos/" + clienteId + "/" + id
+     )
+    );
+
    };
 
-   lista.appendChild(li);
+   listaDiv.appendChild(div);
+
   });
+
  }
 
- document.getElementById("total-pedido")
- .innerText =
- "TOTAL: Gs. " + total.toLocaleString();
+ totalDiv.innerText =
+ "Gs. " + total.toLocaleString();
 
- const mensaje =
- document.getElementById("mensaje-total");
-
- if(total > 0){
-
-  mensaje.style.display = "block";
-
-  mensaje.innerText =
-  `💰 Mesa ${mesa} - Total: Gs. ${total.toLocaleString()}`;
-
-  mensaje.onclick = enviarPedido;
-
- }else{
-
-  mensaje.style.display = "none";
- }
 });
-
-document.getElementById("btn-borrar").onclick = ()=>{
-
- remove(pedidoRef);
-};
 
 let enviandoPedido = false;
 
@@ -756,9 +791,11 @@ async function enviarPedido(){
 
   const pedidoFinal = {
 
+   tipoPedido:"mesa",
+
    mesa: mesa,
 
-   estado: "pendiente",
+   estado: "preparando",
 
    timestamp: Date.now(),
 
@@ -775,7 +812,7 @@ async function enviarPedido(){
   await remove(pedidoRef);
 
   document.getElementById("pedido-flotante")
-  .classList.remove("activo");
+  .style.display = "none";
 
   alert("Pedido enviado correctamente ✔");
 
@@ -789,9 +826,6 @@ async function enviarPedido(){
 
  enviandoPedido = false;
 }
-
-document.getElementById("enviar-cocina")
-.onclick = enviarPedido;
 
 </script>
 
