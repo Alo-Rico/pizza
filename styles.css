@@ -134,7 +134,7 @@ header img.icono{
  color:#22c55e;
 }
 
-/* BOTONES FLOTANTES */
+/* BOTONES */
 
 .btn-grid{
  position:fixed;
@@ -206,20 +206,19 @@ header img.icono{
  min-width:260px;
 }
 
-/* PEDIDO FLOTANTE */
+/* PEDIDO */
 
 #pedido-flotante{
- position:fixed !important;
 
- bottom:210px !important;
+ position:fixed;
 
- left:50% !important;
+ bottom:210px;
 
- transform:
- translateX(-50%)
- translateY(120px);
+ left:50%;
 
- background:#111827 !important;
+ transform:translateX(-50%);
+
+ background:#111827;
 
  border:1px solid rgba(255,255,255,.08);
 
@@ -230,10 +229,6 @@ header img.icono{
  box-shadow:
  0 20px 45px rgba(0,0,0,.45);
 
- opacity:0;
-
- transition:all .35s ease;
-
  z-index:99999;
 
  width:92%;
@@ -241,20 +236,7 @@ header img.icono{
 
  text-align:center;
 
- pointer-events:none;
-}
-
-/* ACTIVO */
-
-#pedido-flotante.activo{
-
- transform:
- translateX(-50%)
- translateY(0);
-
- opacity:1 !important;
-
- pointer-events:auto;
+ display:none;
 }
 
 #pedido-flotante ul{
